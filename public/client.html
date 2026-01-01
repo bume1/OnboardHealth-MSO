@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Progress - Thrive 365 Labs</title>
+  <title>Client Portal - OnboardHealth</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -17,11 +17,11 @@
       theme: {
         extend: {
           colors: {
-            primary: '#045E9F',
-            accent: '#00205A'
+            primary: '#0891B2',
+            accent: '#164E63'
           },
           fontFamily: {
-            sans: ['Open Sans', 'sans-serif']
+            sans: ['Inter', 'sans-serif']
           }
         }
       }
@@ -29,7 +29,7 @@
   </script>
   <style>
     body {
-      font-family: 'Open Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
     }
   </style>
 </head>
@@ -41,24 +41,24 @@
     // Standard phases and stages (always visible)
     const STANDARD_PHASES = {
       'Phase 0': {
-        name: 'Phase 0: Contract Signature',
+        name: 'Phase 0: Agreement & Kickoff',
         stages: ['Contract Signature']
       },
       'Phase 1': {
-        name: 'Phase 1: Pre-Launch',
-        stages: ['Project Kick Off & Stakeholder Alignment', 'Launch Data & Systems Prep']
+        name: 'Phase 1: Pre-Implementation',
+        stages: ['Project Kick Off & Stakeholder Alignment', 'Data & Systems Prep']
       },
       'Phase 2': {
-        name: 'Phase 2: Implementation Sprints',
-        stages: ['Sprint 1: Core System Setups', 'Sprint 2: Lab & QUA Pilot Prep', 'Sprint 3: Soft-Pilot']
+        name: 'Phase 2: Implementation',
+        stages: ['Sprint 1: Core System Setups', 'Sprint 2: Testing & Validation', 'Sprint 3: Pilot']
       },
       'Phase 3': {
         name: 'Phase 3: Go-Live',
         stages: ['Training/Validation', 'Go-Live']
       },
       'Phase 4': {
-        name: 'Phase 4: Post-Launch Optimization',
-        stages: ['KPIs', 'Monitoring & Customer Support']
+        name: 'Phase 4: Optimization',
+        stages: ['KPIs', 'Monitoring & Support']
       }
     };
 
@@ -675,7 +675,7 @@
           </div>
           
           <div className="text-center py-6 text-sm text-gray-500">
-            <p>Developed by Bianca G. C. Ume, MD, MBA, MS</p>
+            <p>Powered by OnboardHealth</p>
           </div>
         </div>
       );

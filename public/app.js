@@ -2,26 +2,27 @@ const { useState, useEffect } = React;
 const API_URL = window.location.origin;
 
 // ============== STANDARD PHASES AND STAGES (Always visible) ==============
+// Generic onboarding phases for healthcare practices - can be customized per template
 const STANDARD_PHASES = {
   'Phase 0': {
-    name: 'Phase 0: Contract Signature',
+    name: 'Phase 0: Agreement & Kickoff',
     stages: ['Contract Signature']
   },
   'Phase 1': {
-    name: 'Phase 1: Pre-Launch',
-    stages: ['Project Kick Off & Stakeholder Alignment', 'Launch Data & Systems Prep']
+    name: 'Phase 1: Pre-Implementation',
+    stages: ['Project Kick Off & Stakeholder Alignment', 'Data & Systems Prep']
   },
   'Phase 2': {
-    name: 'Phase 2: Implementation Sprints',
-    stages: ['Sprint 1: Core System Setups', 'Sprint 2: Lab & QUA Pilot Prep', 'Sprint 3: Soft-Pilot']
+    name: 'Phase 2: Implementation',
+    stages: ['Sprint 1: Core System Setups', 'Sprint 2: Testing & Validation', 'Sprint 3: Pilot']
   },
   'Phase 3': {
     name: 'Phase 3: Go-Live',
     stages: ['Training/Validation', 'Go-Live']
   },
   'Phase 4': {
-    name: 'Phase 4: Post-Launch Optimization',
-    stages: ['KPIs', 'Monitoring & Customer Support']
+    name: 'Phase 4: Optimization',
+    stages: ['KPIs', 'Monitoring & Support']
   }
 };
 
@@ -301,6 +302,99 @@ const api = {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ domain })
+    }).then(r => r.json()),
+
+  // Branding Settings
+  getBranding: () =>
+    fetch(`${API_URL}/api/settings/branding`).then(r => r.json()),
+
+  updateBranding: (token, updates) =>
+    fetch(`${API_URL}/api/settings/branding`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updates)
+    }).then(r => r.json()),
+
+  // Knowledge Hub (Documents)
+  getDocuments: (token, projectId) =>
+    fetch(`${API_URL}/api/projects/${projectId}/documents`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).then(r => r.json()),
+
+  createDocument: (token, projectId, doc) =>
+    fetch(`${API_URL}/api/projects/${projectId}/documents`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(doc)
+    }).then(r => r.json()),
+
+  updateDocument: (token, projectId, docId, updates) =>
+    fetch(`${API_URL}/api/projects/${projectId}/documents/${docId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updates)
+    }).then(r => r.json()),
+
+  deleteDocument: (token, projectId, docId) =>
+    fetch(`${API_URL}/api/projects/${projectId}/documents/${docId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).then(r => r.json()),
+
+  // Protocol Library
+  getProtocols: (token) =>
+    fetch(`${API_URL}/api/protocols`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).then(r => r.json()),
+
+  createProtocol: (token, protocol) =>
+    fetch(`${API_URL}/api/protocols`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(protocol)
+    }).then(r => r.json()),
+
+  updateProtocol: (token, protocolId, updates) =>
+    fetch(`${API_URL}/api/protocols/${protocolId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updates)
+    }).then(r => r.json()),
+
+  deleteProtocol: (token, protocolId) =>
+    fetch(`${API_URL}/api/protocols/${protocolId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).then(r => r.json()),
+
+  getProjectProtocols: (token, projectId) =>
+    fetch(`${API_URL}/api/projects/${projectId}/protocols`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }).then(r => r.json()),
+
+  attachProtocolToProject: (token, projectId, protocolId) =>
+    fetch(`${API_URL}/api/projects/${projectId}/protocols`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ protocolId })
     }).then(r => r.json()),
 
   getUsers: (token) =>
@@ -645,13 +739,20 @@ const AuthScreen = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-teal-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex justify-center mb-6">
-          <img src="/logo.webp" alt="Thrive 365 Labs" className="h-16" />
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span className="text-2xl font-bold text-accent">OnboardHealth</span>
+          </div>
         </div>
-        <h1 className="text-2xl font-bold mb-2 text-accent text-center">New Client Launch Implementation</h1>
-        <p className="text-gray-600 mb-6 text-center">Thrive 365 Labs Web App</p>
+        <h1 className="text-xl font-bold mb-2 text-accent text-center">Client Onboarding Platform</h1>
+        <p className="text-gray-600 mb-6 text-center">Streamlined implementation workflows for healthcare practices</p>
 
 
         {mode === 'forgot' && (
@@ -741,7 +842,7 @@ const AuthScreen = ({ onLogin }) => {
           </div>
         </div>
         <div className="mt-8 text-center text-sm text-gray-500">
-          <p>Developed by Bianca G. C. Ume, MD, MBA, MS</p>
+          <p>Powered by OnboardHealth</p>
         </div>
       </div>
     </div>
@@ -765,7 +866,7 @@ const StatusBadge = ({ status }) => {
 };
 
 // ============== PROJECT LIST COMPONENT ==============
-const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, onManageTemplates, onManageHubSpot, onViewReporting }) => {
+const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, onManageTemplates, onManageHubSpot, onViewReporting, onManageBranding, onViewKnowledgeHub }) => {
   const [projects, setProjects] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -1007,9 +1108,17 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
                 {onManageHubSpot && (
                   <button
                     onClick={() => { onManageHubSpot(); setShowSettingsMenu(false); }}
-                    className="w-full text-left px-4 py-3 hover:bg-gray-100 text-gray-700 text-sm"
+                    className="w-full text-left px-4 py-3 hover:bg-gray-100 text-gray-700 border-b text-sm"
                   >
                     HubSpot Settings
+                  </button>
+                )}
+                {onManageBranding && (
+                  <button
+                    onClick={() => { onManageBranding(); setShowSettingsMenu(false); }}
+                    className="w-full text-left px-4 py-3 hover:bg-gray-100 text-gray-700 text-sm"
+                  >
+                    Branding Settings
                   </button>
                 )}
               </div>
@@ -1039,22 +1148,23 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 <section>
                   <h3 className="text-lg font-bold text-primary mb-3">Getting Started</h3>
-                  <p className="text-gray-700 mb-2">Welcome to the New Client Launch Implementation tracker! This application helps you manage clinical laboratory equipment installations with a structured phase-based approach.</p>
+                  <p className="text-gray-700 mb-2">Welcome to OnboardHealth! This platform helps you manage client onboarding and implementation workflows for healthcare practices - from DPC practices to medical spas and diagnostic labs.</p>
                   <ul className="list-disc ml-5 text-gray-600 space-y-1">
-                    <li><strong>Create a Project:</strong> Click "+ New Project" to start a new client launch</li>
-                    <li><strong>Select a Template:</strong> Choose from pre-built templates with tasks already set up</li>
+                    <li><strong>Create a Project:</strong> Click "+ New Project" to start a new client onboarding</li>
+                    <li><strong>Select a Template:</strong> Choose from pre-built templates for different practice types</li>
                     <li><strong>Track Progress:</strong> Click on a project card to view and manage tasks</li>
+                    <li><strong>Knowledge Hub:</strong> Store SOPs, protocols, and documents for each project</li>
                   </ul>
                 </section>
                 
                 <section>
                   <h3 className="text-lg font-bold text-primary mb-3">Project Phases</h3>
                   <div className="space-y-2 text-gray-600">
-                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-purple-500 rounded"></div><span><strong>Phase 0:</strong> Contract Signature</span></div>
-                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-blue-500 rounded"></div><span><strong>Phase 1:</strong> Pre-Launch (Kick Off, Data Systems Prep)</span></div>
-                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-green-500 rounded"></div><span><strong>Phase 2:</strong> Implementation Sprints (Soft-Pilot, System Setup)</span></div>
+                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-purple-500 rounded"></div><span><strong>Phase 0:</strong> Agreement & Kickoff</span></div>
+                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-blue-500 rounded"></div><span><strong>Phase 1:</strong> Pre-Implementation (Kickoff, Data Systems Prep)</span></div>
+                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-green-500 rounded"></div><span><strong>Phase 2:</strong> Implementation (Testing, Pilot)</span></div>
                     <div className="flex items-center gap-3"><div className="w-4 h-4 bg-orange-500 rounded"></div><span><strong>Phase 3:</strong> Go-Live (Validation, Live Operations)</span></div>
-                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-pink-500 rounded"></div><span><strong>Phase 4:</strong> Post-Launch Optimization</span></div>
+                    <div className="flex items-center gap-3"><div className="w-4 h-4 bg-pink-500 rounded"></div><span><strong>Phase 4:</strong> Optimization</span></div>
                   </div>
                 </section>
 
@@ -3927,6 +4037,364 @@ const ProjectTracker = ({ token, user, project, onBack, onLogout }) => {
   );
 };
 
+// ============== KNOWLEDGE HUB COMPONENT ==============
+const KnowledgeHub = ({ token, user, project, onBack }) => {
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showAddDoc, setShowAddDoc] = useState(false);
+  const [newDoc, setNewDoc] = useState({ title: '', url: '', category: 'General', description: '', showToClient: false });
+  const [editingDoc, setEditingDoc] = useState(null);
+
+  const CATEGORIES = ['General', 'Protocols', 'SOPs', 'Forms', 'Training', 'Client Resources', 'Compliance'];
+
+  useEffect(() => {
+    loadDocuments();
+  }, []);
+
+  const loadDocuments = async () => {
+    setLoading(true);
+    try {
+      const data = await api.getDocuments(token, project.id);
+      setDocuments(data);
+    } catch (err) {
+      console.error('Failed to load documents:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddDocument = async () => {
+    if (!newDoc.title || !newDoc.url) {
+      alert('Title and URL are required');
+      return;
+    }
+    try {
+      const doc = await api.createDocument(token, project.id, newDoc);
+      setDocuments([...documents, doc]);
+      setNewDoc({ title: '', url: '', category: 'General', description: '', showToClient: false });
+      setShowAddDoc(false);
+    } catch (err) {
+      console.error('Failed to add document:', err);
+      alert('Failed to add document');
+    }
+  };
+
+  const handleUpdateDocument = async () => {
+    if (!editingDoc) return;
+    try {
+      await api.updateDocument(token, project.id, editingDoc.id, editingDoc);
+      setDocuments(documents.map(d => d.id === editingDoc.id ? editingDoc : d));
+      setEditingDoc(null);
+    } catch (err) {
+      console.error('Failed to update document:', err);
+      alert('Failed to update document');
+    }
+  };
+
+  const handleDeleteDocument = async (docId) => {
+    if (!confirm('Delete this document?')) return;
+    try {
+      await api.deleteDocument(token, project.id, docId);
+      setDocuments(documents.filter(d => d.id !== docId));
+    } catch (err) {
+      console.error('Failed to delete document:', err);
+      alert('Failed to delete document');
+    }
+  };
+
+  const groupedDocs = documents.reduce((acc, doc) => {
+    const cat = doc.category || 'General';
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(doc);
+    return acc;
+  }, {});
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button onClick={onBack} className="text-gray-600 hover:text-gray-900">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div>
+              <h1 className="text-xl font-bold text-accent">Knowledge Hub</h1>
+              <p className="text-sm text-gray-500">{project.name} - Documents & Resources</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowAddDoc(true)}
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-accent flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Document
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : documents.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-lg border">
+            <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 className="text-lg font-medium text-gray-600 mb-2">No documents yet</h3>
+            <p className="text-gray-500 mb-4">Add SOPs, protocols, forms, and other resources for this project</p>
+            <button onClick={() => setShowAddDoc(true)} className="text-primary hover:underline">Add your first document</button>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {Object.entries(groupedDocs).map(([category, docs]) => (
+              <div key={category} className="bg-white rounded-lg border overflow-hidden">
+                <div className="bg-gray-50 px-4 py-3 border-b">
+                  <h3 className="font-semibold text-gray-800">{category}</h3>
+                </div>
+                <div className="divide-y">
+                  {docs.map(doc => (
+                    <div key={doc.id} className="px-4 py-3 flex items-center justify-between hover:bg-gray-50">
+                      <div className="flex-1">
+                        <a href={doc.url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline">
+                          {doc.title}
+                        </a>
+                        {doc.description && <p className="text-sm text-gray-500 mt-1">{doc.description}</p>}
+                        <div className="flex items-center gap-2 mt-1">
+                          {doc.showToClient && (
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">Visible to Client</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => setEditingDoc(doc)} className="text-gray-400 hover:text-gray-600">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </button>
+                        <button onClick={() => handleDeleteDocument(doc.id)} className="text-gray-400 hover:text-red-600">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {showAddDoc && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-bold mb-4">Add Document</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Title *</label>
+                <input type="text" value={newDoc.title} onChange={e => setNewDoc({ ...newDoc, title: e.target.value })} className="w-full border rounded-lg px-3 py-2" placeholder="Document title" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">URL *</label>
+                <input type="url" value={newDoc.url} onChange={e => setNewDoc({ ...newDoc, url: e.target.value })} className="w-full border rounded-lg px-3 py-2" placeholder="https://..." />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Category</label>
+                <select value={newDoc.category} onChange={e => setNewDoc({ ...newDoc, category: e.target.value })} className="w-full border rounded-lg px-3 py-2">
+                  {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea value={newDoc.description} onChange={e => setNewDoc({ ...newDoc, description: e.target.value })} className="w-full border rounded-lg px-3 py-2" rows={2} placeholder="Optional description"></textarea>
+              </div>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="showToClient" checked={newDoc.showToClient} onChange={e => setNewDoc({ ...newDoc, showToClient: e.target.checked })} className="rounded" />
+                <label htmlFor="showToClient" className="text-sm">Show to client in portal</label>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <button onClick={() => setShowAddDoc(false)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
+              <button onClick={handleAddDocument} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-accent">Add Document</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingDoc && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-bold mb-4">Edit Document</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Title</label>
+                <input type="text" value={editingDoc.title} onChange={e => setEditingDoc({ ...editingDoc, title: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">URL</label>
+                <input type="url" value={editingDoc.url} onChange={e => setEditingDoc({ ...editingDoc, url: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Category</label>
+                <select value={editingDoc.category} onChange={e => setEditingDoc({ ...editingDoc, category: e.target.value })} className="w-full border rounded-lg px-3 py-2">
+                  {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea value={editingDoc.description || ''} onChange={e => setEditingDoc({ ...editingDoc, description: e.target.value })} className="w-full border rounded-lg px-3 py-2" rows={2}></textarea>
+              </div>
+              <div className="flex items-center gap-2">
+                <input type="checkbox" id="editShowToClient" checked={editingDoc.showToClient} onChange={e => setEditingDoc({ ...editingDoc, showToClient: e.target.checked })} className="rounded" />
+                <label htmlFor="editShowToClient" className="text-sm">Show to client in portal</label>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <button onClick={() => setEditingDoc(null)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
+              <button onClick={handleUpdateDocument} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-accent">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============== BRANDING SETTINGS COMPONENT (Admin Only) ==============
+const BrandingSettings = ({ token, user, onBack, onLogout }) => {
+  const [branding, setBranding] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    loadBranding();
+  }, []);
+
+  const loadBranding = async () => {
+    setLoading(true);
+    try {
+      const data = await api.getBranding();
+      setBranding(data);
+    } catch (err) {
+      console.error('Failed to load branding:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await api.updateBranding(token, branding);
+      alert('Branding settings saved! Changes will appear on next page refresh.');
+    } catch (err) {
+      console.error('Failed to save branding:', err);
+      alert('Failed to save branding settings');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading || !branding) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button onClick={onBack} className="text-gray-600 hover:text-gray-900">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div>
+              <h1 className="text-xl font-bold text-accent">Branding Settings</h1>
+              <p className="text-sm text-gray-500">Customize your white-label appearance</p>
+            </div>
+          </div>
+          <button onClick={onLogout} className="text-gray-600 hover:text-gray-900">Logout</button>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <div className="bg-white rounded-lg border overflow-hidden">
+          <div className="bg-gray-50 px-6 py-4 border-b">
+            <h2 className="font-semibold text-gray-800">Brand Identity</h2>
+            <p className="text-sm text-gray-500">These settings control how your platform appears to users</p>
+          </div>
+          <div className="p-6 space-y-6">
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium mb-1">Product Name</label>
+                <input type="text" value={branding.productName} onChange={e => setBranding({ ...branding, productName: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Tagline</label>
+                <input type="text" value={branding.tagline} onChange={e => setBranding({ ...branding, tagline: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Hero Text</label>
+              <input type="text" value={branding.heroText} onChange={e => setBranding({ ...branding, heroText: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Description</label>
+              <textarea value={branding.description} onChange={e => setBranding({ ...branding, description: e.target.value })} className="w-full border rounded-lg px-3 py-2" rows={2}></textarea>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium mb-1">Primary Color</label>
+                <div className="flex items-center gap-2">
+                  <input type="color" value={branding.primaryColor} onChange={e => setBranding({ ...branding, primaryColor: e.target.value })} className="w-10 h-10 rounded border cursor-pointer" />
+                  <input type="text" value={branding.primaryColor} onChange={e => setBranding({ ...branding, primaryColor: e.target.value })} className="flex-1 border rounded-lg px-3 py-2" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Accent Color</label>
+                <div className="flex items-center gap-2">
+                  <input type="color" value={branding.accentColor} onChange={e => setBranding({ ...branding, accentColor: e.target.value })} className="w-10 h-10 rounded border cursor-pointer" />
+                  <input type="text" value={branding.accentColor} onChange={e => setBranding({ ...branding, accentColor: e.target.value })} className="flex-1 border rounded-lg px-3 py-2" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Footer Text</label>
+              <input type="text" value={branding.footerText} onChange={e => setBranding({ ...branding, footerText: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Support Email</label>
+              <input type="email" value={branding.supportEmail} onChange={e => setBranding({ ...branding, supportEmail: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
+            </div>
+          </div>
+          <div className="bg-gray-50 px-6 py-4 border-t flex justify-end">
+            <button onClick={handleSave} disabled={saving} className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-accent disabled:bg-gray-400">
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h3 className="font-medium text-blue-800 mb-2">White-Label Ready</h3>
+          <p className="text-sm text-blue-700">Your OnboardHealth instance can be fully customized for each healthcare practice. Update the branding above to personalize the experience for DPC practices, medical spas, diagnostic labs, and more.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ============== USER MANAGEMENT COMPONENT (Admin Only) ==============
 const UserManagement = ({ token, user, onBack, onLogout }) => {
   const [users, setUsers] = useState([]);
@@ -5464,9 +5932,10 @@ const App = () => {
 
   useEffect(() => {
     const path = window.location.pathname;
-    const match = path.match(/\/thrive365labslaunch\/(.+)-internal$/i);
+    // Support both new /app and legacy /thrive365labslaunch paths
+    const match = path.match(/\/(app|thrive365labslaunch)\/(.+)-internal$/i);
     if (match) {
-      setPendingInternalSlug(match[1]);
+      setPendingInternalSlug(match[2]);
     }
   }, []);
 
@@ -5499,20 +5968,25 @@ const App = () => {
     setView('list');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.history.pushState({}, '', '/thrive365labslaunch/login');
+    window.history.pushState({}, '', '/app/login');
   };
 
   const handleSelectProject = (project) => {
     setSelectedProject(project);
     setView('tracker');
     const slug = project.clientLinkSlug || project.clientLinkId;
-    window.history.pushState({}, '', `/thrive365labslaunch/${slug}-internal`);
+    window.history.pushState({}, '', `/app/${slug}-internal`);
   };
 
   const handleBackToList = () => {
     setSelectedProject(null);
     setView('list');
-    window.history.pushState({}, '', '/thrive365labslaunch/home');
+    window.history.pushState({}, '', '/app/home');
+  };
+
+  const handleViewKnowledgeHub = (project) => {
+    setSelectedProject(project);
+    setView('knowledge-hub');
   };
 
   if (!token) {
@@ -5575,6 +6049,30 @@ const App = () => {
     );
   }
 
+  if (view === 'knowledge-hub' && selectedProject) {
+    return (
+      <KnowledgeHub
+        token={token}
+        user={user}
+        project={selectedProject}
+        onBack={() => {
+          setView('tracker');
+        }}
+      />
+    );
+  }
+
+  if (view === 'branding' && user.role === 'admin') {
+    return (
+      <BrandingSettings
+        token={token}
+        user={user}
+        onBack={handleBackToList}
+        onLogout={handleLogout}
+      />
+    );
+  }
+
   return (
     <ProjectList
       token={token}
@@ -5585,6 +6083,8 @@ const App = () => {
       onManageTemplates={() => setView('templates')}
       onManageHubSpot={() => setView('hubspot')}
       onViewReporting={() => setView('reporting')}
+      onManageBranding={() => setView('branding')}
+      onViewKnowledgeHub={handleViewKnowledgeHub}
     />
   );
 };

@@ -13,41 +13,78 @@ const googledrive = require('./googledrive');
 const app = express();
 const db = new Database();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'thrive365-secret-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || 'onboardhealth-secret-change-in-production';
+
+// Default branding configuration (white-label ready)
+const DEFAULT_BRANDING = {
+  productName: 'OnboardHealth',
+  tagline: 'Client Onboarding Platform',
+  heroText: 'Streamlined Implementation Workflows',
+  description: 'One system for protocols, workflows, and client access',
+  logoUrl: '/logo.webp',
+  faviconUrl: '/favicon.ico',
+  primaryColor: '#0891B2',
+  accentColor: '#164E63',
+  footerText: 'Powered by OnboardHealth',
+  supportEmail: 'support@onboardhealth.com',
+  industryPresets: ['DPC Practice', 'Primary Care', 'Medical Spa', 'Diagnostics Lab', 'Healthcare Clinic']
+};
+
+// Get branding settings from database or use defaults
+const getBranding = async () => {
+  const stored = await db.get('branding_settings');
+  return { ...DEFAULT_BRANDING, ...stored };
+};
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 
-// Serve static files for the main app path (both cases)
-app.use('/thrive365labsLAUNCH', express.static('public'));
-app.use('/thrive365labslaunch', express.static('public'));
+// Legacy routes redirect FIRST to new /app path (before static middleware)
+app.get('/thrive365labsLAUNCH', (req, res) => res.redirect(301, '/app'));
+app.get('/thrive365labslaunch', (req, res) => res.redirect(301, '/app'));
+app.get('/thrive365labsLAUNCH/*', (req, res) => {
+  const path = req.params[0] || '';
+  res.redirect(301, `/app/${path}`);
+});
+app.get('/thrive365labslaunch/*', (req, res) => {
+  const path = req.params[0] || '';
+  res.redirect(301, `/app/${path}`);
+});
+
+// Serve static files for the new /app path only
+app.use('/app', express.static('public'));
 app.use(express.static('public'));
 
-// Serve the main app at /thrive365labsLAUNCH and /thrive365labslaunch root only
-app.get('/thrive365labsLAUNCH', (req, res) => {
+// Serve the main app at /app (new primary route)
+app.get('/app', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
-app.get('/thrive365labslaunch', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
-// Note: Specific sub-routes (login, home, :slug, :slug-internal) are defined at the end of the file
 
-// Initialize admin user on startup
+// Initialize admin user on startup (with configurable default admin)
 (async () => {
   try {
+    const branding = await getBranding();
+    const defaultAdminEmail = process.env.DEFAULT_ADMIN_EMAIL || 'admin@onboardhealth.com';
+    const defaultAdminPassword = process.env.DEFAULT_ADMIN_PASSWORD || 'OnboardHealth2025!';
+    const defaultAdminName = process.env.DEFAULT_ADMIN_NAME || 'Admin';
+    
     const users = await db.get('users') || [];
-    if (!users.find(u => u.email === 'bianca@thrive365labs.com')) {
-      const hashedPassword = await bcrypt.hash('Thrive2025!', 10);
+    
+    // Check if any admin exists
+    const hasAdmin = users.some(u => u.role === 'admin');
+    
+    if (!hasAdmin) {
+      const hashedPassword = await bcrypt.hash(defaultAdminPassword, 10);
       users.push({
         id: uuidv4(),
-        email: 'bianca@thrive365labs.com',
-        name: 'Bianca Ume',
+        email: defaultAdminEmail,
+        name: defaultAdminName,
         password: hashedPassword,
         role: 'admin',
         createdAt: new Date().toISOString()
       });
       await db.set('users', users);
-      console.log('✅ Admin user created: bianca@thrive365labs.com / Thrive2025!');
+      console.log(`✅ Admin user created: ${defaultAdminEmail}`);
     }
   } catch (err) {
     console.error('Error creating admin user:', err);
@@ -1284,6 +1321,233 @@ app.put('/api/settings/client-portal-domain', authenticateToken, requireAdmin, a
   }
 });
 
+// ============== BRANDING SETTINGS (White-Label) ==============
+app.get('/api/settings/branding', async (req, res) => {
+  try {
+    const branding = await getBranding();
+    res.json(branding);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.put('/api/settings/branding', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const currentBranding = await getBranding();
+    const updates = req.body;
+    
+    // Merge updates with current branding
+    const newBranding = { ...currentBranding, ...updates };
+    await db.set('branding_settings', newBranding);
+    
+    res.json({ message: 'Branding settings saved', branding: newBranding });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ============== KNOWLEDGE HUB (Documents & Resources) ==============
+app.get('/api/projects/:id/documents', authenticateToken, async (req, res) => {
+  try {
+    if (!canAccessProject(req.user, req.params.id)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    const documents = await db.get(`documents_${req.params.id}`) || [];
+    res.json(documents);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/api/projects/:id/documents', authenticateToken, async (req, res) => {
+  try {
+    if (!canAccessProject(req.user, req.params.id)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    const { title, url, category, description, showToClient } = req.body;
+    if (!title || !url) {
+      return res.status(400).json({ error: 'Title and URL are required' });
+    }
+    
+    const documents = await db.get(`documents_${req.params.id}`) || [];
+    const newDoc = {
+      id: uuidv4(),
+      title,
+      url,
+      category: category || 'General',
+      description: description || '',
+      showToClient: showToClient || false,
+      createdBy: req.user.email,
+      createdAt: new Date().toISOString()
+    };
+    documents.push(newDoc);
+    await db.set(`documents_${req.params.id}`, documents);
+    res.json(newDoc);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.put('/api/projects/:id/documents/:docId', authenticateToken, async (req, res) => {
+  try {
+    if (!canAccessProject(req.user, req.params.id)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    const documents = await db.get(`documents_${req.params.id}`) || [];
+    const docIdx = documents.findIndex(d => d.id === req.params.docId);
+    if (docIdx === -1) {
+      return res.status(404).json({ error: 'Document not found' });
+    }
+    
+    const { title, url, category, description, showToClient } = req.body;
+    if (title !== undefined) documents[docIdx].title = title;
+    if (url !== undefined) documents[docIdx].url = url;
+    if (category !== undefined) documents[docIdx].category = category;
+    if (description !== undefined) documents[docIdx].description = description;
+    if (showToClient !== undefined) documents[docIdx].showToClient = showToClient;
+    documents[docIdx].updatedAt = new Date().toISOString();
+    
+    await db.set(`documents_${req.params.id}`, documents);
+    res.json(documents[docIdx]);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.delete('/api/projects/:id/documents/:docId', authenticateToken, async (req, res) => {
+  try {
+    if (!canAccessProject(req.user, req.params.id)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    const documents = await db.get(`documents_${req.params.id}`) || [];
+    const filtered = documents.filter(d => d.id !== req.params.docId);
+    await db.set(`documents_${req.params.id}`, filtered);
+    res.json({ message: 'Document deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get documents for client portal (only showToClient=true)
+app.get('/api/client/:slug/documents', async (req, res) => {
+  try {
+    const projects = await getProjects();
+    const project = projects.find(p => p.clientLinkSlug === req.params.slug || p.clientLinkId === req.params.slug);
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    const documents = await db.get(`documents_${project.id}`) || [];
+    const clientDocs = documents.filter(d => d.showToClient);
+    res.json(clientDocs);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ============== PROTOCOL LIBRARY ==============
+app.get('/api/protocols', authenticateToken, async (req, res) => {
+  try {
+    const protocols = await db.get('protocol_library') || [];
+    res.json(protocols);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.post('/api/protocols', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const { name, category, description, steps, documents } = req.body;
+    if (!name) {
+      return res.status(400).json({ error: 'Protocol name is required' });
+    }
+    
+    const protocols = await db.get('protocol_library') || [];
+    const newProtocol = {
+      id: uuidv4(),
+      name,
+      category: category || 'General',
+      description: description || '',
+      steps: steps || [],
+      documents: documents || [],
+      createdBy: req.user.email,
+      createdAt: new Date().toISOString()
+    };
+    protocols.push(newProtocol);
+    await db.set('protocol_library', protocols);
+    res.json(newProtocol);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.put('/api/protocols/:id', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const protocols = await db.get('protocol_library') || [];
+    const idx = protocols.findIndex(p => p.id === req.params.id);
+    if (idx === -1) {
+      return res.status(404).json({ error: 'Protocol not found' });
+    }
+    
+    const { name, category, description, steps, documents } = req.body;
+    if (name !== undefined) protocols[idx].name = name;
+    if (category !== undefined) protocols[idx].category = category;
+    if (description !== undefined) protocols[idx].description = description;
+    if (steps !== undefined) protocols[idx].steps = steps;
+    if (documents !== undefined) protocols[idx].documents = documents;
+    protocols[idx].updatedAt = new Date().toISOString();
+    
+    await db.set('protocol_library', protocols);
+    res.json(protocols[idx]);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.delete('/api/protocols/:id', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const protocols = await db.get('protocol_library') || [];
+    const filtered = protocols.filter(p => p.id !== req.params.id);
+    await db.set('protocol_library', filtered);
+    res.json({ message: 'Protocol deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Attach protocol to project
+app.post('/api/projects/:id/protocols', authenticateToken, async (req, res) => {
+  try {
+    if (!canAccessProject(req.user, req.params.id)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    const { protocolId } = req.body;
+    const projectProtocols = await db.get(`project_protocols_${req.params.id}`) || [];
+    
+    if (!projectProtocols.includes(protocolId)) {
+      projectProtocols.push(protocolId);
+      await db.set(`project_protocols_${req.params.id}`, projectProtocols);
+    }
+    
+    res.json({ message: 'Protocol attached to project' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.get('/api/projects/:id/protocols', authenticateToken, async (req, res) => {
+  try {
+    if (!canAccessProject(req.user, req.params.id)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    const projectProtocolIds = await db.get(`project_protocols_${req.params.id}`) || [];
+    const allProtocols = await db.get('protocol_library') || [];
+    const projectProtocols = allProtocols.filter(p => projectProtocolIds.includes(p.id));
+    res.json(projectProtocols);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 async function checkAndUpdateHubSpotDealStage(projectId) {
   try {
     const projects = await getProjects();
@@ -1999,22 +2263,16 @@ app.delete('/api/templates/:id', authenticateToken, requireAdmin, async (req, re
 });
 
 // ============== CLIENT PORTAL & INTERNAL ROUTES ==============
-// Reserved paths: login, home serve the main app
-app.get('/thrive365labslaunch/login', (req, res) => {
+// New /app routes (primary)
+app.get('/app/login', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
-app.get('/thrive365labsLAUNCH/login', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
-app.get('/thrive365labslaunch/home', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
-app.get('/thrive365labsLAUNCH/home', (req, res) => {
+app.get('/app/home', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-// Internal project tracker: /thrive365labslaunch/{slug}-internal
-app.get('/thrive365labslaunch/:slug-internal', async (req, res) => {
+// Internal project tracker: /app/{slug}-internal
+app.get('/app/:slug-internal', async (req, res) => {
   const slug = req.params.slug;
   const projects = await getProjects();
   const project = projects.find(p => p.clientLinkSlug === slug || p.clientLinkId === slug);
@@ -2024,57 +2282,49 @@ app.get('/thrive365labslaunch/:slug-internal', async (req, res) => {
   } else {
     res.status(404).send('Project not found');
   }
+});
+
+// Client portal: /app/{slug} (without -internal suffix)
+app.get('/app/:slug', async (req, res) => {
+  const slug = req.params.slug;
+  // Skip if ends with -internal (handled above)
+  if (slug.endsWith('-internal')) {
+    return res.sendFile(__dirname + '/public/index.html');
+  }
+  const projects = await getProjects();
+  const project = projects.find(p => p.clientLinkSlug === slug || p.clientLinkId === slug);
+  
+  if (project) {
+    res.sendFile(__dirname + '/public/client.html');
+  } else {
+    res.status(404).send('Project not found');
+  }
+});
+
+// Legacy routes - redirect to new /app path
+app.get('/thrive365labslaunch/login', (req, res) => res.redirect(301, '/app/login'));
+app.get('/thrive365labsLAUNCH/login', (req, res) => res.redirect(301, '/app/login'));
+app.get('/thrive365labslaunch/home', (req, res) => res.redirect(301, '/app/home'));
+app.get('/thrive365labsLAUNCH/home', (req, res) => res.redirect(301, '/app/home'));
+
+app.get('/thrive365labslaunch/:slug-internal', async (req, res) => {
+  res.redirect(301, `/app/${req.params.slug}-internal`);
 });
 app.get('/thrive365labsLAUNCH/:slug-internal', async (req, res) => {
-  const slug = req.params.slug;
-  const projects = await getProjects();
-  const project = projects.find(p => p.clientLinkSlug === slug || p.clientLinkId === slug);
-  
-  if (project) {
-    res.sendFile(__dirname + '/public/index.html');
-  } else {
-    res.status(404).send('Project not found');
-  }
+  res.redirect(301, `/app/${req.params.slug}-internal`);
 });
 
-// Client portal: /thrive365labslaunch/{slug} (without -internal suffix)
 app.get('/thrive365labsLAUNCH/:slug', async (req, res) => {
-  const slug = req.params.slug;
-  // Skip if ends with -internal (handled above)
-  if (slug.endsWith('-internal')) {
-    return res.sendFile(__dirname + '/public/index.html');
-  }
-  const projects = await getProjects();
-  const project = projects.find(p => p.clientLinkSlug === slug || p.clientLinkId === slug);
-  
-  if (project) {
-    res.sendFile(__dirname + '/public/client.html');
-  } else {
-    res.status(404).send('Project not found');
-  }
+  res.redirect(301, `/app/${req.params.slug}`);
 });
-
 app.get('/thrive365labslaunch/:slug', async (req, res) => {
-  const slug = req.params.slug;
-  // Skip if ends with -internal (handled above)
-  if (slug.endsWith('-internal')) {
-    return res.sendFile(__dirname + '/public/index.html');
-  }
-  const projects = await getProjects();
-  const project = projects.find(p => p.clientLinkSlug === slug || p.clientLinkId === slug);
-  
-  if (project) {
-    res.sendFile(__dirname + '/public/client.html');
-  } else {
-    res.status(404).send('Project not found');
-  }
+  res.redirect(301, `/app/${req.params.slug}`);
 });
 
-// Legacy root-level route DISABLED - use /thrive365labslaunch/{slug} instead
-// Redirect old URLs to new format for backwards compatibility
+// Redirect root-level legacy slugs to new /app format
 app.get('/:slug', async (req, res, next) => {
   // Skip if it looks like a file request or known route
-  if (req.params.slug.includes('.') || ['api', 'client', 'favicon.ico', 'thrive365labsLAUNCH', 'thrive365labslaunch'].includes(req.params.slug)) {
+  if (req.params.slug.includes('.') || ['api', 'client', 'favicon.ico', 'app', 'thrive365labsLAUNCH', 'thrive365labslaunch'].includes(req.params.slug)) {
     return next();
   }
   
@@ -2083,14 +2333,13 @@ app.get('/:slug', async (req, res, next) => {
   const project = projects.find(p => p.clientLinkSlug === req.params.slug);
   
   if (project) {
-    // Redirect to the proper URL format
-    res.redirect(301, `/thrive365labslaunch/${req.params.slug}`);
+    res.redirect(301, `/app/${req.params.slug}`);
   } else {
     next();
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`🔐 Admin login: bianca@thrive365labs.com / Thrive2025!`);
+  console.log(`✅ OnboardHealth Server running on port ${PORT}`);
+  console.log(`📍 Access the app at /app`);
 });

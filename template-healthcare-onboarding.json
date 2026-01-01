@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "phase": "Phase 0",
+    "stage": "Contract Signature",
+    "taskTitle": "Service agreement signed",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Service agreement signed"
+  },
+  {
+    "id": 2,
+    "phase": "Phase 0",
+    "stage": "Contract Signature",
+    "taskTitle": "Welcome packet sent",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Welcome packet sent"
+  },
+  {
+    "id": 3,
+    "phase": "Phase 1",
+    "stage": "Project Kick Off & Stakeholder Alignment",
+    "taskTitle": "Kickoff call scheduled",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Kickoff call scheduled"
+  },
+  {
+    "id": 4,
+    "phase": "Phase 1",
+    "stage": "Project Kick Off & Stakeholder Alignment",
+    "taskTitle": "Key stakeholders identified",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 5,
+    "phase": "Phase 1",
+    "stage": "Project Kick Off & Stakeholder Alignment",
+    "taskTitle": "Implementation timeline confirmed",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Implementation timeline confirmed"
+  },
+  {
+    "id": 6,
+    "phase": "Phase 1",
+    "stage": "Data & Systems Prep",
+    "taskTitle": "Client data intake form completed",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Client data intake form completed"
+  },
+  {
+    "id": 7,
+    "phase": "Phase 1",
+    "stage": "Data & Systems Prep",
+    "taskTitle": "Practice management system access granted",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 8,
+    "phase": "Phase 1",
+    "stage": "Data & Systems Prep",
+    "taskTitle": "EMR/EHR integration requirements documented",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 9,
+    "phase": "Phase 2",
+    "stage": "Sprint 1: Core System Setups",
+    "taskTitle": "User accounts created",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 10,
+    "phase": "Phase 2",
+    "stage": "Sprint 1: Core System Setups",
+    "taskTitle": "Billing configuration complete",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 11,
+    "phase": "Phase 2",
+    "stage": "Sprint 1: Core System Setups",
+    "taskTitle": "Patient portal setup",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Patient portal setup"
+  },
+  {
+    "id": 12,
+    "phase": "Phase 2",
+    "stage": "Sprint 2: Testing & Validation",
+    "taskTitle": "Internal testing complete",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 13,
+    "phase": "Phase 2",
+    "stage": "Sprint 2: Testing & Validation",
+    "taskTitle": "Client UAT session scheduled",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Client UAT session scheduled"
+  },
+  {
+    "id": 14,
+    "phase": "Phase 2",
+    "stage": "Sprint 2: Testing & Validation",
+    "taskTitle": "Issues from testing resolved",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 15,
+    "phase": "Phase 2",
+    "stage": "Sprint 3: Pilot",
+    "taskTitle": "Soft launch with limited patients",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Soft launch with limited patients"
+  },
+  {
+    "id": 16,
+    "phase": "Phase 2",
+    "stage": "Sprint 3: Pilot",
+    "taskTitle": "Pilot feedback collected",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 17,
+    "phase": "Phase 2",
+    "stage": "Sprint 3: Pilot",
+    "taskTitle": "Pilot adjustments implemented",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 18,
+    "phase": "Phase 3",
+    "stage": "Training/Validation",
+    "taskTitle": "Staff training sessions scheduled",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Staff training sessions scheduled"
+  },
+  {
+    "id": 19,
+    "phase": "Phase 3",
+    "stage": "Training/Validation",
+    "taskTitle": "Training materials delivered",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Training materials delivered"
+  },
+  {
+    "id": 20,
+    "phase": "Phase 3",
+    "stage": "Training/Validation",
+    "taskTitle": "Staff competency validated",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 21,
+    "phase": "Phase 3",
+    "stage": "Go-Live",
+    "taskTitle": "Go-live date confirmed",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Go-live date confirmed"
+  },
+  {
+    "id": 22,
+    "phase": "Phase 3",
+    "stage": "Go-Live",
+    "taskTitle": "Go-live support plan in place",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 23,
+    "phase": "Phase 3",
+    "stage": "Go-Live",
+    "taskTitle": "Practice is live",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Practice is live!"
+  },
+  {
+    "id": 24,
+    "phase": "Phase 4",
+    "stage": "KPIs",
+    "taskTitle": "30-day performance review",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "30-day performance review"
+  },
+  {
+    "id": 25,
+    "phase": "Phase 4",
+    "stage": "KPIs",
+    "taskTitle": "Key metrics established",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": false,
+    "clientName": ""
+  },
+  {
+    "id": 26,
+    "phase": "Phase 4",
+    "stage": "Monitoring & Support",
+    "taskTitle": "Ongoing support handoff complete",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Ongoing support handoff complete"
+  },
+  {
+    "id": 27,
+    "phase": "Phase 4",
+    "stage": "Monitoring & Support",
+    "taskTitle": "Optimization recommendations delivered",
+    "owner": "",
+    "dueDate": "",
+    "showToClient": true,
+    "clientName": "Optimization recommendations delivered"
+  }
+]

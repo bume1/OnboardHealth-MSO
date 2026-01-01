@@ -1,10 +1,10 @@
-# New Client Launch Implementation - Thrive 365 Labs Web App
+# OnboardHealth - Client Onboarding Platform
 
 ## Overview
 
-A multi-project launch tracker designed for managing clinical laboratory equipment installations. Designed by Bianca G. C. Ume, MD, MBA, MS. The system provides a 102-task template specifically for Biolis AU480 CLIA lab setups, with admin controls, team member accounts, and embeddable client portals for external stakeholders to view progress without authentication.
+OnboardHealth is a white-label client onboarding platform designed for healthcare practices. Originally built for clinical laboratory implementations, it has been generalized to serve DPC practices, primary care clinics, medical spas, and diagnostic labs.
 
-The primary use case is tracking complex, multi-phase laboratory equipment launches with tasks spanning contract signature through go-live, including CLIA certification, equipment procurement, LIS/EMR integration, and staff training coordination.
+**Core Value Proposition**: One system where practices house client protocols, manage implementation workflows, and give both internal teams AND clients clear access to everything they need. Turn 20 hours of scattered manual work into 2 hours of streamlined execution.
 
 ## User Preferences
 
@@ -20,233 +20,175 @@ Preferred communication style: Simple, everyday language.
   - Users stored under `users` key as array
   - Projects stored under `projects` key as array
   - Tasks stored per-project under `tasks_{projectId}` keys
+  - Documents stored per-project under `documents_{projectId}` keys
+  - Protocols stored under `protocol_library` key
+  - Branding settings stored under `branding_settings` key
 
 ### Frontend Architecture
 - **Framework**: React 18 loaded via CDN (no build step)
 - **Transpilation**: Babel standalone for JSX in browser
 - **Styling**: Tailwind CSS via CDN
+- **Font**: Inter (via Google Fonts)
 - **Structure**: Single-page application with components in `public/app.js`
 - **Client Portal**: Separate `public/client.html` for unauthenticated embeddable views
 
+### URL Structure
+- **Primary App Path**: `/app` (e.g., `https://yourdomain.com/app`)
+- **Client Portal**: `/app/{client-slug}` (e.g., `/app/acme-medical`)
+- **Internal View**: `/app/{client-slug}-internal`
+- **Legacy Support**: `/thrive365labslaunch/*` paths redirect to `/app/*`
+
 ### Authentication Model
-- Admin user auto-created on server startup (bianca@thrive365labs.com)
+- Admin user auto-created on startup (configurable via environment variables)
+- Default admin: admin@onboardhealth.com
 - User signup available for team members
 - Role-based access: admin vs regular user
 - Client portal uses project-specific embed links (no login required)
 
-### Password Reset Flow (Admin-Managed)
-- **No email integration**: Password resets are handled manually by administrators
-- **User Request**: Users click "Forgot Password?" and enter their email
-- **Notification**: User sees message that an administrator will reach out to help
-- **Admin View**: Password reset requests appear in User Management with amber notification banner
-- **Admin Action**: Admin clicks "Reset Password" to open user edit modal, sets new password, contacts user manually
-- **Dismiss Option**: Admins can dismiss invalid/duplicate requests
-- **Data Storage**: Requests stored under `password_reset_requests` key with status tracking
+### White-Label Branding System
+- **Database-Stored Configuration**: Branding settings persist in database
+- **Admin Configurable**: Product name, tagline, colors, footer text, support email
+- **API Endpoints**:
+  - `GET /api/settings/branding` - Get current branding (public)
+  - `PUT /api/settings/branding` - Update branding (admin only)
+- **Default Colors**: Primary #0891B2 (cyan), Accent #164E63 (dark teal)
 
-### Project Access Control
-- **Admins**: Can see and manage ALL projects in the system
-- **Regular Users**: Can only see projects they have been assigned to by an admin
-- **Assignment**: Admins assign projects to users via the User Management page (Edit user modal)
-- **Enforcement**: All project-related API endpoints check user's assignedProjects before allowing access
-- **Real-time**: Permission changes take effect immediately (no re-login required)
-- User data includes `assignedProjects` array field containing project IDs the user can access
+## Key Features
 
-### Task Permissions
-- **Template tasks** (from original template): Can be edited by all users, deleted only by admins
-- **User-created tasks**: Can be edited and deleted by the creator or admins
-- Delete button only appears for tasks you created (or all tasks if admin)
+### Project Management
+- Multi-project dashboard with status tracking (In Progress, Paused, Completed)
+- Template-based project creation
+- Cloning projects for quick duplication
+- HubSpot CRM integration for deal sync
+- Google Drive integration for document storage
 
-### Data Model
-- **Users**: id, email, name, password (hashed), role, createdAt, assignedProjects (array of project IDs)
-- **Projects**: id, name, clientName, projectManager, hubspotRecordId, status (active/paused/completed), template, clientLinkId, clientLinkSlug
-- **Tasks**: 102-task template with fields including phase, stage, taskTitle, owner, startDate, dueDate, dateCompleted, duration, completed status
+### Knowledge Hub
+- Per-project document repository
+- Categories: General, Protocols, SOPs, Forms, Training, Client Resources, Compliance
+- Client visibility toggle for each document
+- Links to Google Drive, external URLs, or other resources
+- **API Endpoints**:
+  - `GET /api/projects/:id/documents` - List documents
+  - `POST /api/projects/:id/documents` - Add document
+  - `PUT /api/projects/:id/documents/:docId` - Update document
+  - `DELETE /api/projects/:id/documents/:docId` - Delete document
+  - `GET /api/client/:slug/documents` - Client-visible documents only
 
-### Project Management Features
-- **Status Tags**: Projects display status badges (In Progress, Paused, Completed)
-- **Editable Details**: Project name, client name, On-Site Project Manager, HubSpot Record ID, and status can be edited via modal
-- **Admin-Only Deletion**: Only admins can delete projects (removes project and all associated tasks)
+### Protocol Library
+- Reusable protocol playbooks across projects
+- Categories for organization
+- Steps with owners and linked documents
+- Attach protocols to projects
+- **API Endpoints**:
+  - `GET /api/protocols` - List all protocols
+  - `POST /api/protocols` - Create protocol (admin)
+  - `PUT /api/protocols/:id` - Update protocol (admin)
+  - `DELETE /api/protocols/:id` - Delete protocol (admin)
+  - `GET /api/projects/:id/protocols` - List project protocols
+  - `POST /api/projects/:id/protocols` - Attach protocol to project
 
-### Template System
-- Task templates loaded from JSON file (`template-biolis-au480-clia.json`)
-- Templates organized by Phase (0-4) and Stage groupings
-- Applied to new projects on creation
+### Task Management
+- Phase-based organization (0-4 phases)
+- Subtasks with independent owners and status
+- Bulk operations for efficiency
+- Notes and comments
+- CSV import/export
+- Client visibility toggles
+
+### Standard Phases
+- **Phase 0**: Agreement & Kickoff (Contract Signature)
+- **Phase 1**: Pre-Implementation (Kickoff, Data & Systems Prep)
+- **Phase 2**: Implementation (Core Setups, Testing & Validation, Pilot)
+- **Phase 3**: Go-Live (Training/Validation, Go-Live)
+- **Phase 4**: Optimization (KPIs, Monitoring & Support)
+
+### Client Portal
+- Unauthenticated access via project-specific URLs
+- List, Timeline, and Calendar views
+- Shows only client-visible tasks
+- Displays owner names (resolved from emails)
+- Access to client-visible documents
+
+## Templates
+
+### Available Templates
+1. **Biolis AU480 CLIA Lab Setup** (`template-biolis-au480-clia.json`) - 102 tasks for lab installations
+2. **Healthcare Onboarding** (`template-healthcare-onboarding.json`) - 27 tasks for general healthcare practice onboarding
+
+### Industry Presets (White-Label)
+- DPC Practice
+- Primary Care
+- Medical Spa
+- Diagnostics Lab
+- Healthcare Clinic
 
 ## External Dependencies
 
 ### Third-Party Services
-- **HubSpot**: Integration fields for CRM sync (deal pipeline, client profiles)
-- **Google Drive**: Storage for soft-pilot checklist uploads (organized by client folders)
-- **Replit Database**: Primary data persistence via `@replit/database` package
+- **HubSpot**: CRM sync for deals, tasks, and notes
+- **Google Drive**: Document storage and soft-pilot checklist uploads
+- **Replit Database**: Primary data persistence
 
 ### NPM Packages
 - `express` - Web server framework
 - `cors` - Cross-origin resource sharing
 - `bcryptjs` - Password hashing
-- `jsonwebtoken` - JWT authentication tokens
+- `jsonwebtoken` - JWT authentication
 - `uuid` - Unique ID generation
-- `@replit/database` - Replit's key-value database client
+- `@replit/database` - Replit's key-value database
 - `body-parser` - Request body parsing
-- `googleapis` - Google Drive API client for file uploads
-
-### CDN Dependencies (Frontend)
-- React 18 (production build)
-- ReactDOM 18
-- Babel standalone (JSX transpilation)
-- Tailwind CSS
+- `googleapis` - Google Drive API
+- `@hubspot/api-client` - HubSpot API
 
 ### Environment Variables
 - `PORT` - Server port (defaults to 5000)
-- `JWT_SECRET` - Token signing secret (has default, should be changed in production)
+- `JWT_SECRET` - Token signing secret
+- `DEFAULT_ADMIN_EMAIL` - Initial admin email
+- `DEFAULT_ADMIN_PASSWORD` - Initial admin password
+- `DEFAULT_ADMIN_NAME` - Initial admin name
 
-## Branding
-- **Logo**: Thrive 365 Labs logo from thrive365labs.com
-- **Primary Color**: #045E9F (blue)
-- **Accent Color**: #00205A (dark navy)
-- **Font**: Open Sans (via Google Fonts)
-- **Designer Credit**: "Developed by Bianca G. C. Ume, MD, MBA, MS"
+## API Overview
 
-## Clone/Duplicate Features
-- **Clone Projects**: Any user can clone a project via "Clone Project" button on project cards. Creates new project with all tasks reset to incomplete status.
-- **Clone Templates**: Admins can clone templates via "Clone" button in Template Management. Creates new template with all task definitions.
+### Authentication
+- `POST /api/auth/signup` - Create account
+- `POST /api/auth/login` - Login
+- `POST /api/auth/forgot-password` - Request password reset
 
-## CSV Import
-- **Template CSV Import**: Admins can bulk import tasks to templates via "Import CSV" button in Template Management
-- **Project CSV Import**: Users can bulk import tasks to projects via "Import CSV" button in Project Tracker
-- **CSV Columns**: phase, stage, taskTitle, owner, dueDate, showToClient, clientName, completed, dateCompleted, dependencies, isSubtask, parentTaskId, subtaskStatus
-- **Parser Features**: Handles quoted fields, escaped quotes (""), commas within fields, and multiline content
-- **Completion Status**: Import 'completed' column (accepts true/yes/1) to mark tasks as complete
-- **Client-Facing Name**: When showToClient is true, clientName defaults to taskTitle if not specified
+### Projects
+- `GET /api/projects` - List projects
+- `POST /api/projects` - Create project
+- `PUT /api/projects/:id` - Update project
+- `DELETE /api/projects/:id` - Delete project (admin)
+- `POST /api/projects/:id/clone` - Clone project
 
-## HubSpot Integration
+### Tasks
+- `GET /api/projects/:id/tasks` - List tasks
+- `POST /api/projects/:id/tasks` - Create task
+- `PUT /api/projects/:id/tasks/:taskId` - Update task
+- `DELETE /api/projects/:id/tasks/:taskId` - Delete task
 
-### Configuration
-- HubSpot integration uses Replit's OAuth connector for secure credential management
-- Access: Admin users can configure HubSpot settings via "HubSpot Settings" button on the dashboard
-- Stage Mapping: Map project phases (0-4) to HubSpot deal pipeline stages
+### Settings
+- `GET /api/settings/branding` - Get branding
+- `PUT /api/settings/branding` - Update branding (admin)
+- `GET /api/settings/client-portal-domain` - Get portal domain
+- `PUT /api/settings/client-portal-domain` - Set portal domain (admin)
 
-### Sync Behavior
-- **Task Completion**: Creates a HubSpot task (marked complete) associated with the deal. Assigns owner by email match (preferred) or first/last name match. Task body includes phase, stage, completion details, and all task notes
-- **Stage Completion Notes**: When all tasks in a stage are completed, a comprehensive note is logged to HubSpot including all task details, owners, completion dates/times, and notes
-- **Phase Completion**: When all tasks in a phase are completed, a stage-by-stage summary is logged AND the deal moves to the mapped pipeline stage
-- **Sync Indicator**: Projects with HubSpot Record IDs show last sync timestamp on the project dashboard
+## Recent Changes (January 2026)
 
-Note: Adding notes to tasks in the webapp does NOT trigger HubSpot sync (to avoid overloading). Notes are included in the task body when the task is completed and in stage completion summaries.
+### White-Label Transformation
+- Rebranded from "Thrive 365 Labs" to "OnboardHealth"
+- Updated primary color scheme from blue (#045E9F) to cyan (#0891B2)
+- Changed font from Open Sans to Inter
+- Generalized terminology from lab-specific to universal healthcare onboarding
+- Updated route structure from `/thrive365labslaunch` to `/app`
 
-### Data Flow
-- Projects store `hubspotRecordId` field to link to HubSpot records
-- Stage mappings stored in database under `hubspot_stage_mapping` key
-- `lastHubSpotSync` timestamp updated on projects when syncs occur
+### New Features
+- **Knowledge Hub**: Centralized document repository per project
+- **Protocol Library**: Reusable protocol playbooks
+- **Branding Settings**: Admin-configurable white-label settings
+- **Healthcare Templates**: Generic templates for various practice types
 
-### API Endpoints
-- `GET /api/hubspot/test` - Test HubSpot connection status
-- `GET /api/hubspot/pipelines` - Fetch available deal pipelines and stages
-- `GET /api/hubspot/stage-mapping` - Get current phase-to-stage mapping
-- `PUT /api/hubspot/stage-mapping` - Save phase-to-stage mapping (admin only)
-- `POST /api/projects/:id/soft-pilot-checklist` - Submit soft-pilot checklist with signature to HubSpot
-
-## Reporting
-
-### Launch Reports Page
-- Accessible via "Reports" button on dashboard (available to all users)
-- Summary stats: Total projects, Completed, In Progress, Average weeks to launch
-
-### Charts
-1. **Launches by Client**: Stacked bar chart showing completed vs in-progress vs paused projects per client
-2. **Go-Live Timelines**: Bar chart showing implementation duration (weeks) for completed projects
-
-### Launch Duration Calculation
-- Calculated as weeks between "Contract signed" task completion and "First Live Patient Samples Processed" task completion
-- Displayed on completed project cards in the dashboard
-- Used in reporting charts and tables
-
-### Per-Stage Task Addition
-- Each stage in the list view has an "+ Add Task" button
-- Clicking pre-fills the phase and stage for the new task
-
-### Owner Assignment
-- **Email-Based Assignment**: Task owners are assigned by email address (stored internally as email)
-- **Name Display**: Owner names are displayed in the UI by looking up the user's name from their email
-- **Team Members Dropdown**: Owner selection uses a dropdown of registered team members (by email, showing name)
-- **Client Portal**: Server resolves owner emails to names before sending to client portal (ownerDisplayName field)
-
-### Subtasks
-- Each task can have multiple subtasks with their own owners (any user in the system)
-- Subtasks have title, owner (email with dropdown selection), and status (Pending, Complete, N/A)
-- **Separate "Add Subtask" button** visible on each task (not buried in notes)
-- **Subtask status dropdown**: Pending, Complete, or N/A (Not Applicable)
-- **Completion enforcement**: Parent task cannot be marked complete until all subtasks are either Complete or N/A
-- Subtasks are NOT synced to HubSpot (only parent tasks sync)
-- "Subtasks incomplete" warning badge shown on tasks with pending subtasks
-
-### Bulk Task Operations
-- "Bulk Select" mode allows selecting multiple tasks via checkboxes
-- "Select All" and "Deselect All" buttons for quick selection
-- **Per-Stage Bulk Selection**: Each stage header has "Select Stage" / "Deselect Stage" toggle button when in bulk mode
-- "Mark X Complete" and "Mark X Incomplete" bulk action buttons
-- Bulk updates do NOT sync to HubSpot (to prevent overloading)
-
-### Admin Activity Logging
-- **Storage**: Activity log stored under `activity_log` database key (limited to 500 entries)
-- **Logged Actions**: Task completions, reopenings, and updates are automatically logged
-- **Activity Details**: Each entry includes user name, action type, entity type, timestamp, and details (task title, stage, etc.)
-- **Admin Access**: "View Activity Log" link in footer (admin only)
-- **API Endpoint**: `GET /api/admin/activity-log` - Retrieve activity log with optional `limit` and `projectId` filters
-
-## Custom Domain & App URL
-
-### Application Path
-- Main app accessible at `/thrive365labslaunch` path (e.g., `https://deapps.pro/thrive365labslaunch`)
-- Both lowercase and uppercase paths are supported for backwards compatibility
-
-### Client Portal URLs
-- Client portal links use format: `https://deapps.pro/thrive365labslaunch/{client-slug}`
-- Example: `https://deapps.pro/thrive365labslaunch/dallas-forth-worth-urology`
-- Default base URL is `https://deapps.pro` if no custom domain is configured
-- **Per-Project Custom Domain**: Each project can have its own `clientPortalDomain` field configured in project settings
-- Domain priority: Project-specific domain > Global domain > Default (`https://deapps.pro`)
-- Both root-level (`/slug`) and legacy formats work for backwards compatibility
-
-### API Endpoints
-- `GET /api/settings/client-portal-domain` - Get global custom domain (fallback)
-- `PUT /api/settings/client-portal-domain` - Set global custom domain (admin only)
-
-### Task Owner Editing
-- Owner field can only be edited by admins after initial assignment
-- Non-admin users cannot modify owner assignments on any tasks
-
-## Soft-Pilot Checklist Feature
-
-### Overview
-- A dedicated checklist view for all tasks and subtasks in the "Sprint 3: Soft-Pilot" stage
-- Accessible via "View Checklist" button on the Sprint 3: Soft-Pilot stage header in list view
-- Generates a formatted HTML document with task statuses and signature fields
-
-### Features
-- **Task Display**: Shows all Sprint 3 tasks with completion status checkboxes
-- **Subtask Display**: Includes subtasks with their status (Pending/Complete/N/A)
-- **Owner Resolution**: Displays owner names (resolved from email addresses)
-- **Signature Fields**: Clinical Application Specialist must provide name, title, and date
-
-### Google Drive Integration
-- On submission, the checklist is uploaded to Google Drive as an HTML file
-- Files are organized in folders: `Thrive365Labs Checklists/{Client Name}/`
-- File naming format: `Soft-Pilot-Checklist_{ProjectName}_{Timestamp}.html`
-- Revised versions include version number: `..._REVISED_v2_{Timestamp}.html`
-
-### HubSpot Integration
-- A note is created on the deal record with submission details and Google Drive link
-- Note includes: signer name, title, date, and link to uploaded file
-- Does NOT require HubSpot for upload (uses Google Drive instead)
-- HubSpot note is logged if project has a HubSpot Record ID configured
-
-### API Endpoint
-- `POST /api/projects/:id/soft-pilot-checklist` - Submit signed checklist and upload to Google Drive
-
-### Data Storage
-- Projects store `softPilotChecklistSubmitted` object with:
-  - `submittedAt`: Timestamp
-  - `submittedBy`: User email
-  - `signature`: Name, title, date
-  - `submissionCount`: Number of submissions (for version tracking)
-  - `isRevision`: Boolean indicating if this was an update
-  - `driveLink`: Google Drive web view URL for the uploaded file
+### Technical Improvements
+- Configurable default admin credentials via environment variables
+- Legacy URL redirects for backwards compatibility
+- Cleaner URL structure for better SEO
