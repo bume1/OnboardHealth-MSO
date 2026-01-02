@@ -155,14 +155,19 @@ const generateClientSlug = (clientName, existingSlugs = []) => {
 };
 
 // Load template from JSON file
-async function loadTemplate() {
+async function loadTemplate(filename = 'template-biolis-au480-clia.json') {
   try {
-    const data = await fs.readFile(path.join(__dirname, 'template-biolis-au480-clia.json'), 'utf8');
+    const data = await fs.readFile(path.join(__dirname, filename), 'utf8');
     return JSON.parse(data);
   } catch (err) {
-    console.error('Error loading template:', err);
+    console.error(`Error loading template ${filename}:`, err);
     return [];
   }
+}
+
+// Load healthcare template
+async function loadHealthcareTemplate() {
+  return loadTemplate('template-healthcare-onboarding.json');
 }
 
 // Auth middleware
@@ -1868,18 +1873,44 @@ app.get('/api/projects/:id/export', authenticateToken, async (req, res) => {
 app.get('/api/templates', authenticateToken, async (req, res) => {
   try {
     let templates = await db.get('templates') || [];
+    let needsSave = false;
     
-    // If no templates in DB, load the default one from file
-    if (templates.length === 0) {
-      const defaultTemplate = await loadTemplate();
-      templates = [{
+    // Seed default templates if missing
+    const defaultTemplates = [
+      {
         id: 'biolis-au480-clia',
         name: 'Biolis AU480 with CLIA Upgrade',
         description: '102-task template for laboratory equipment installations',
-        tasks: defaultTemplate,
-        createdAt: new Date().toISOString(),
+        file: 'template-biolis-au480-clia.json',
+        isDefault: false
+      },
+      {
+        id: 'healthcare-onboarding',
+        name: 'Healthcare Practice Onboarding',
+        description: '27-task universal template for DPC, medical spas, primary care, and diagnostic labs',
+        file: 'template-healthcare-onboarding.json',
         isDefault: true
-      }];
+      }
+    ];
+    
+    for (const def of defaultTemplates) {
+      if (!templates.find(t => t.id === def.id)) {
+        const tasks = await loadTemplate(def.file);
+        if (tasks.length > 0) {
+          templates.push({
+            id: def.id,
+            name: def.name,
+            description: def.description,
+            tasks: tasks,
+            createdAt: new Date().toISOString(),
+            isDefault: def.isDefault
+          });
+          needsSave = true;
+        }
+      }
+    }
+    
+    if (needsSave) {
       await db.set('templates', templates);
     }
     
