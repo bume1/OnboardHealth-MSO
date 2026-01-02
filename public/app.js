@@ -535,21 +535,13 @@ const api = {
 const AppHeader = ({ user, onLogout, children }) => {
   return (
     <>
-      {/* Top Bar - Dark Navy */}
-      <div className="bg-[#00205A] text-white text-sm">
+      {/* Top Bar - Dark Teal */}
+      <div className="bg-accent text-white text-sm">
         <div className="max-w-6xl mx-auto px-6 py-2 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <a href="https://www.linkedin.com/company/thrive-365-labs" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/thrive365labs" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
-            </a>
+            <span className="text-cyan-200 font-medium">OnboardHealth</span>
           </div>
-          <a href="tel:+17707629269" className="flex items-center gap-2 hover:text-blue-300">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-            <span>(770) 762-9269</span>
-          </a>
+          <span className="text-cyan-200">Client Onboarding Platform</span>
         </div>
       </div>
       
@@ -557,7 +549,14 @@ const AppHeader = ({ user, onLogout, children }) => {
       <div className="bg-white border-b shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <img src="/logo.webp" alt="Thrive 365 Labs" className="h-12" />
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <span className="text-xl font-bold text-primary">OnboardHealth</span>
+            </div>
           </div>
           <nav className="flex items-center gap-6">
             {children}
@@ -996,7 +995,7 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
   const copyClientLink = (project) => {
     const baseUrl = getBaseUrl(project.clientPortalDomain || clientPortalDomain);
     const linkId = project.clientLinkSlug || project.clientLinkId;
-    const link = `${baseUrl}/thrive365labslaunch/${linkId}`;
+    const link = `${baseUrl}/app/${linkId}`;
     navigator.clipboard.writeText(link);
     alert(`Link copied!\n\n${link}`);
   };
@@ -1004,7 +1003,7 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
   const getClientLinkDisplay = (project) => {
     const baseUrl = getBaseUrl(project.clientPortalDomain || clientPortalDomain);
     const linkId = project.clientLinkSlug || project.clientLinkId;
-    return `${baseUrl}/thrive365labslaunch/${linkId}`;
+    return `${baseUrl}/app/${linkId}`;
   };
 
   const handleEditProject = async () => {
@@ -1193,7 +1192,7 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
                   <h3 className="text-lg font-bold text-primary mb-3">Client Portal</h3>
                   <ul className="list-disc ml-5 text-gray-600 space-y-1">
                     <li>Each project has a shareable client link for external stakeholders</li>
-                    <li>Client portal URL format: <code className="bg-gray-100 px-1 rounded">https://deapps.pro/thrive365labslaunch/client-name</code></li>
+                    <li>Client portal URL format: <code className="bg-gray-100 px-1 rounded">https://yourdomain.com/app/client-name</code></li>
                     <li>Click "Copy Client Link" on project cards to share with clients</li>
                     <li>Clients can view progress without logging in</li>
                   </ul>
@@ -1268,7 +1267,7 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
               <div>
                 <label className="block text-sm font-medium mb-1">Client Name *</label>
                 <input
-                  placeholder="e.g., Thrive 365 Labs"
+                  placeholder="e.g., ABC Medical Group"
                   value={newProject.clientName}
                   onChange={(e) => setNewProject({...newProject, clientName: e.target.value})}
                   className="w-full px-3 py-2 border rounded-md"
@@ -2132,19 +2131,29 @@ const SoftPilotChecklist = ({ token, project, tasks, teamMembers, onClose, onSub
   <meta charset="UTF-8">
   <title>Soft-Pilot Checklist - ${project.name}</title>
   <style>
-    body { font-family: 'Open Sans', Arial, sans-serif; padding: 40px; max-width: 900px; margin: 0 auto; }
-    h1 { color: #045E9F; margin-bottom: 5px; }
-    h2 { color: #00205A; margin-top: 30px; }
+    body { font-family: 'Inter', Arial, sans-serif; padding: 40px; max-width: 900px; margin: 0 auto; }
+    h1 { color: #0891B2; margin-bottom: 5px; }
+    h2 { color: #164E63; margin-top: 30px; }
     table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    th { background-color: #045E9F; color: white; padding: 12px 8px; text-align: left; }
+    th { background-color: #0891B2; color: white; padding: 12px 8px; text-align: left; }
     .signature-section { margin-top: 50px; border-top: 2px solid #e5e7eb; padding-top: 30px; }
     .signature-field { margin: 15px 0; }
     .signature-label { font-weight: bold; color: #374151; }
     .signature-value { border-bottom: 1px solid #374151; padding: 5px 0; min-width: 250px; display: inline-block; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .logo-icon { width: 40px; height: 40px; background: #0891B2; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .logo-text { font-size: 24px; font-weight: bold; color: #0891B2; }
   </style>
 </head>
 <body>
-  <img src="https://thrive365labs.com/wp-content/uploads/2023/04/Thrive-365-Labs-Logo-white-background.png" alt="Thrive 365 Labs" style="max-width: 200px; margin-bottom: 20px;">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <span class="logo-text">OnboardHealth</span>
+  </div>
   <h1>Soft-Pilot Checklist</h1>
   <p style="color: #6b7280; margin-bottom: 5px;"><strong>Project:</strong> ${project.name}</p>
   <p style="color: #6b7280; margin-bottom: 20px;"><strong>Client:</strong> ${project.clientName}</p>
@@ -2182,8 +2191,8 @@ const SoftPilotChecklist = ({ token, project, tasks, teamMembers, onClose, onSub
   </div>
 
   <footer style="margin-top: 50px; text-align: center; color: #9ca3af; font-size: 12px;">
-    <p>Developed by Bianca G. C. Ume, MD, MBA, MS</p>
-    <p>Thrive 365 Labs - New Client Launch Implementation</p>
+    <p>Powered by OnboardHealth</p>
+    <p>Client Onboarding Platform</p>
   </footer>
 </body>
 </html>
@@ -2816,14 +2825,14 @@ const ProjectTracker = ({ token, user, project, onBack, onLogout }) => {
 
   const copyClientLink = () => {
     const baseUrl = getBaseUrlForProject(project.clientPortalDomain || clientPortalDomain);
-    const link = `${baseUrl}/thrive365labslaunch/${project.clientLinkSlug || project.clientLinkId}`;
+    const link = `${baseUrl}/app/${project.clientLinkSlug || project.clientLinkId}`;
     navigator.clipboard.writeText(link);
     alert(`Link copied!\n\n${link}`);
   };
 
   const getClientLinkDisplay = () => {
     const baseUrl = getBaseUrlForProject(project.clientPortalDomain || clientPortalDomain);
-    return `${baseUrl}/thrive365labslaunch/${project.clientLinkSlug || project.clientLinkId}`;
+    return `${baseUrl}/app/${project.clientLinkSlug || project.clientLinkId}`;
   };
 
   const getPhaseColor = (phase) => {
@@ -5743,7 +5752,7 @@ const Reporting = ({ token, user, onBack, onLogout }) => {
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Launch Reports</h1>
-          <p className="text-gray-600 mb-4">New Client Launch Implementation - Thrive 365 Labs Web App</p>
+          <p className="text-gray-600 mb-4">Client Onboarding Analytics</p>
 
           {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -5932,7 +5941,7 @@ const App = () => {
 
   useEffect(() => {
     const path = window.location.pathname;
-    // Support both new /app and legacy /thrive365labslaunch paths
+    // Support both new /app and legacy paths
     const match = path.match(/\/(app|thrive365labslaunch)\/(.+)-internal$/i);
     if (match) {
       setPendingInternalSlug(match[2]);

@@ -561,8 +561,8 @@
 
       const pathParts = window.location.pathname.split('/').filter(Boolean);
       const isClientRoute = pathParts[0] === 'client';
-      const isThrivePath = pathParts[0]?.toLowerCase() === 'thrive365labslaunch';
-      const linkId = isClientRoute || isThrivePath ? pathParts[1] : pathParts[0];
+      const isAppPath = pathParts[0]?.toLowerCase() === 'app' || pathParts[0]?.toLowerCase() === 'thrive365labslaunch';
+      const linkId = isClientRoute || isAppPath ? pathParts[1] : pathParts[0];
 
       useEffect(() => {
         fetch(`/api/client/${linkId}`)
@@ -613,7 +613,15 @@
             <div className="max-w-6xl mx-auto px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <img src="/logo.webp" alt="Thrive 365 Labs" className="h-10" />
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <span className="text-xl font-bold text-primary">OnboardHealth</span>
+                  </div>
+                  <div className="h-8 w-px bg-gray-300"></div>
                   <div>
                     <h1 className="text-xl font-bold text-accent">{data.project.name}</h1>
                     <p className="text-sm text-gray-600">{data.project.clientName}</p>
