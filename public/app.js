@@ -541,7 +541,7 @@ const AppHeader = ({ user, onLogout, children }) => {
           <div className="flex items-center gap-4">
             <span className="text-cyan-200 font-medium">OnboardHealth</span>
           </div>
-          <span className="text-cyan-200">Client Onboarding Platform</span>
+          <span className="text-cyan-200">Healthcare Implementation Platform</span>
         </div>
       </div>
       
@@ -750,8 +750,8 @@ const AuthScreen = ({ onLogin }) => {
             <span className="text-2xl font-bold text-accent">OnboardHealth</span>
           </div>
         </div>
-        <h1 className="text-xl font-bold mb-2 text-accent text-center">Client Onboarding Platform</h1>
-        <p className="text-gray-600 mb-6 text-center">Streamlined implementation workflows for healthcare practices</p>
+        <h1 className="text-xl font-bold mb-2 text-accent text-center">Healthcare Implementation Platform</h1>
+        <p className="text-gray-600 mb-6 text-center">Streamlined workflows for patient onboarding, service launches, and facility setup</p>
 
 
         {mode === 'forgot' && (
@@ -1147,9 +1147,9 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 <section>
                   <h3 className="text-lg font-bold text-primary mb-3">Getting Started</h3>
-                  <p className="text-gray-700 mb-2">Welcome to OnboardHealth! This platform helps you manage client onboarding and implementation workflows for healthcare practices - from DPC practices to medical spas and diagnostic labs.</p>
+                  <p className="text-gray-700 mb-2">Welcome to OnboardHealth! This platform helps you manage implementation workflows for healthcare practices - including patient onboarding, new service line launches, facility setup, and partner/provider onboarding.</p>
                   <ul className="list-disc ml-5 text-gray-600 space-y-1">
-                    <li><strong>Create a Project:</strong> Click "+ New Project" to start a new client onboarding</li>
+                    <li><strong>Create a Project:</strong> Click "+ New Project" to start a new implementation workflow</li>
                     <li><strong>Select a Template:</strong> Choose from pre-built templates for different practice types</li>
                     <li><strong>Track Progress:</strong> Click on a project card to view and manage tasks</li>
                     <li><strong>Knowledge Hub:</strong> Store SOPs, protocols, and documents for each project</li>
@@ -1265,7 +1265,7 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Client Name *</label>
+                <label className="block text-sm font-medium mb-1">Organization/Entity Name *</label>
                 <input
                   placeholder="e.g., ABC Medical Group"
                   value={newProject.clientName}
@@ -1485,7 +1485,7 @@ const ProjectList = ({ token, user, onSelectProject, onLogout, onManageUsers, on
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Client Name</label>
+                  <label className="block text-sm font-medium mb-1">Organization/Entity Name</label>
                   <input
                     value={editingProject.clientName}
                     onChange={(e) => setEditingProject({...editingProject, clientName: e.target.value})}
@@ -2192,7 +2192,7 @@ const SoftPilotChecklist = ({ token, project, tasks, teamMembers, onClose, onSub
 
   <footer style="margin-top: 50px; text-align: center; color: #9ca3af; font-size: 12px;">
     <p>Powered by OnboardHealth</p>
-    <p>Client Onboarding Platform</p>
+    <p>Healthcare Implementation Platform</p>
   </footer>
 </body>
 </html>
@@ -2363,8 +2363,8 @@ const SoftPilotChecklist = ({ token, project, tasks, teamMembers, onClose, onSub
         <div className="p-6 border-t bg-gray-50 flex justify-between items-center">
           <p className="text-sm text-gray-500">
             {isResubmission 
-              ? 'Updated checklist will be saved to Drive > Operations > Installations > Client Onboarding > "Soft" Launches. HubSpot will receive notes automatically.' 
-              : 'This checklist will be saved to Drive > Operations > Installations > Client Onboarding > "Soft" Launches. HubSpot will receive notes automatically.'}
+              ? 'Updated checklist will be saved to Drive > Operations > Installations > Onboarding > "Soft" Launches. HubSpot will receive notes automatically.' 
+              : 'This checklist will be saved to Drive > Operations > Installations > Onboarding > "Soft" Launches. HubSpot will receive notes automatically.'}
           </p>
           <div className="flex gap-3">
             <button
@@ -5752,7 +5752,7 @@ const Reporting = ({ token, user, onBack, onLogout }) => {
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Launch Reports</h1>
-          <p className="text-gray-600 mb-4">Client Onboarding Analytics</p>
+          <p className="text-gray-600 mb-4">Implementation Analytics</p>
 
           {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">

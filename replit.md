@@ -1,10 +1,22 @@
-# OnboardHealth - Client Onboarding Platform
+# OnboardHealth - Healthcare Implementation Platform
 
 ## Overview
 
-OnboardHealth is a white-label client onboarding platform designed for healthcare practices. Originally built for clinical laboratory implementations, it has been generalized to serve DPC practices, primary care clinics, medical spas, and diagnostic labs.
+OnboardHealth is a white-label implementation platform designed for healthcare practices. Originally built for clinical laboratory implementations, it has been generalized to serve DPC practices, primary care clinics, medical spas, and diagnostic labs.
 
-**Core Value Proposition**: One system where practices house client protocols, manage implementation workflows, and give both internal teams AND clients clear access to everything they need. Turn 20 hours of scattered manual work into 2 hours of streamlined execution.
+### Who It's For
+- DPC practices
+- Primary care clinics
+- Medical spas
+- Diagnostic labs
+
+### Use Cases
+- Patient onboarding
+- New service line launches (like physician office labs)
+- New facility setup
+- Partner/referring provider onboarding
+
+**Core Value Proposition**: One system where practices house protocols, manage implementation workflows, and give both internal teams AND stakeholders clear access to everything they need. Turn 20 hours of scattered manual work into 2 hours of streamlined execution.
 
 ## User Preferences
 
