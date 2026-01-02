@@ -751,7 +751,7 @@ const AuthScreen = ({ onLogin }) => {
           </div>
         </div>
         <h1 className="text-xl font-bold mb-2 text-accent text-center">Healthcare Implementation Platform</h1>
-        <p className="text-gray-600 mb-6 text-center">Streamlined workflows for onboarding, service launches, and facility setup</p>
+        <p className="text-gray-600 mb-6 text-center">Streamlined workflows for patient or partner onboarding, service launches, and facility setup</p>
 
 
         {mode === 'forgot' && (
