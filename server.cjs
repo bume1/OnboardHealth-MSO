@@ -7,8 +7,8 @@ const Database = require('@replit/database');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const path = require('path');
-const hubspot = require('./hubspot');
-const googledrive = require('./googledrive');
+const hubspot = require('./hubspot.cjs');
+const googledrive = require('./googledrive.cjs');
 
 const app = express();
 const db = new Database();
@@ -85,6 +85,23 @@ app.get('/app', (req, res) => {
       });
       await db.set('users', users);
       console.log(`✅ Admin user created: ${defaultAdminEmail}`);
+    }
+    
+    // Create demo user (bianca) if not exists
+    const demoEmail = 'bianca@thrive365labs.com';
+    const hasDemoUser = users.some(u => u.email === demoEmail);
+    if (!hasDemoUser) {
+      const demoHashedPassword = await bcrypt.hash('Thrive2025!', 10);
+      users.push({
+        id: uuidv4(),
+        email: demoEmail,
+        name: 'Bianca Ume',
+        password: demoHashedPassword,
+        role: 'admin',
+        createdAt: new Date().toISOString()
+      });
+      await db.set('users', users);
+      console.log(`✅ Demo user created: ${demoEmail}`);
     }
   } catch (err) {
     console.error('Error creating admin user:', err);
