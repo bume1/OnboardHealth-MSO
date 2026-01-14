@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
-    emptyDirBeforeWrite: true
+    emptyOutDir: true
   },
   server: {
     host: '0.0.0.0',
