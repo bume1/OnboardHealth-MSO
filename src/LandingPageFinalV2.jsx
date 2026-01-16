@@ -2308,14 +2308,6 @@ const LandingPageFinal = () => {
               <ArrowRight size={20} />
             </a>
           </div>
-
-          <div style={{
-            marginTop: '48px',
-            fontSize: '14px',
-            color: '#94a3b8'
-          }}>
-            Join MSOs managing 200+ practices who've cut implementation costs by 70%
-          </div>
         </div>
       </section>
 
@@ -2356,7 +2348,7 @@ const LandingPageFinal = () => {
             }}>OnboardHealth</div>
           </div>
 
-          <div>© 2025 OnboardHealth. Built for MSO operators who deserve better.</div>
+          <div>© 2025 Diamond Element Consulting. Built for MSO operators who deserve better.</div>
         </div>
       </footer>
     </div>

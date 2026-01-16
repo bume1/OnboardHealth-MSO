@@ -2415,7 +2415,7 @@ const LandingPage = () => {
           <span style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>OnboardHealth</span>
         </div>
         <div style={{ fontSize: '14px' }}>
-          © 2025 OnboardHealth. All rights reserved.
+          © 2025 Diamond Element Consulting. All rights reserved.
         </div>
       </footer>
     </div>
@@ -2777,7 +2777,7 @@ const SignupPage = () => {
 
         <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid #e5e7eb', textAlign: 'center' }}>
           <p style={{ fontSize: '12px', color: '#9ca3af' }}>
-            © 2025 OnboardHealth
+            © 2025 Diamond Element Consulting
           </p>
         </div>
       </div>
