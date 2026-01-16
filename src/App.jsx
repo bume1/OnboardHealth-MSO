@@ -1821,13 +1821,698 @@ const CampaignWizard = () => {
 };
 
 // ============================================================================
+// LANDING PAGE COMPONENT
+// ============================================================================
+
+const LandingPage = () => {
+  const [hoveredFeature, setHoveredFeature] = useState(null);
+  const [activeTab, setActiveTab] = useState('predict');
+
+  // Teal brand colors matching the login page
+  const brand = {
+    primary: '#0891B2',
+    primaryDark: '#164E63',
+    primaryLight: '#22D3EE',
+    gradient: 'linear-gradient(135deg, #0891B2 0%, #164E63 100%)',
+    bgGradient: 'linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 50%, #E0F7FA 100%)'
+  };
+
+  return (
+    <div style={{
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      background: '#ffffff',
+      minHeight: '100vh'
+    }}>
+      {/* Navigation */}
+      <nav style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid #e2e8f0',
+        padding: '16px 0'
+      }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '0 40px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          {/* Logo - Matching screenshot */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
+              background: brand.gradient,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <CheckCircle2 size={26} color="white" />
+            </div>
+            <div style={{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: brand.primaryDark
+            }}>
+              OnboardHealth
+            </div>
+          </div>
+
+          {/* Nav Links */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '40px'
+          }}>
+            <a href="#features" style={{
+              fontSize: '15px',
+              fontWeight: '600',
+              color: '#475569',
+              textDecoration: 'none'
+            }}>Features</a>
+            <a href="#ai" style={{
+              fontSize: '15px',
+              fontWeight: '600',
+              color: '#475569',
+              textDecoration: 'none'
+            }}>AI Capabilities</a>
+            <a href="#pricing" style={{
+              fontSize: '15px',
+              fontWeight: '600',
+              color: '#475569',
+              textDecoration: 'none'
+            }}>Pricing</a>
+            <Link to="/dashboard" style={{
+              padding: '12px 28px',
+              background: brand.gradient,
+              color: 'white',
+              borderRadius: '10px',
+              fontSize: '15px',
+              fontWeight: '700',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: '0 4px 12px rgba(8, 145, 178, 0.3)'
+            }}>
+              View Demo
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section style={{
+        background: brand.bgGradient,
+        padding: '80px 40px 100px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '80px',
+            alignItems: 'center'
+          }}>
+            {/* Left Column */}
+            <div>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 20px',
+                background: 'white',
+                borderRadius: '999px',
+                marginBottom: '24px',
+                border: `1px solid ${brand.primary}40`,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+              }}>
+                <Sparkles size={16} color={brand.primary} />
+                <span style={{
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  color: brand.primaryDark
+                }}>
+                  AI-Powered MSO Platform
+                </span>
+              </div>
+
+              <h1 style={{
+                fontSize: '56px',
+                fontWeight: '800',
+                color: brand.primaryDark,
+                lineHeight: '1.1',
+                marginBottom: '24px'
+              }}>
+                Healthcare Implementation
+                <br />
+                <span style={{ color: brand.primary }}>Platform</span>
+              </h1>
+
+              <p style={{
+                fontSize: '20px',
+                color: '#475569',
+                lineHeight: '1.6',
+                marginBottom: '40px',
+                maxWidth: '540px'
+              }}>
+                Streamlined workflows for patient or partner onboarding, service launches, and facility setup. AI predicts delays 3 weeks early.
+              </p>
+
+              {/* CTA Buttons */}
+              <div style={{
+                display: 'flex',
+                gap: '16px',
+                marginBottom: '48px'
+              }}>
+                <Link to="/signup" style={{
+                  padding: '16px 32px',
+                  background: brand.gradient,
+                  color: 'white',
+                  borderRadius: '12px',
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  boxShadow: '0 8px 24px rgba(8, 145, 178, 0.35)'
+                }}>
+                  Get Started Free
+                  <ArrowRight size={18} />
+                </Link>
+
+                <Link to="/dashboard" style={{
+                  padding: '16px 32px',
+                  background: 'white',
+                  color: brand.primaryDark,
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '12px',
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px'
+                }}>
+                  <PlayCircle size={18} />
+                  View Demo
+                </Link>
+              </div>
+
+              {/* Stats */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '32px'
+              }}>
+                <div>
+                  <div style={{ fontSize: '28px', fontWeight: '800', color: brand.primaryDark }}>$250K+</div>
+                  <div style={{ fontSize: '13px', color: '#64748b' }}>Annual Savings</div>
+                </div>
+                <div style={{ width: '1px', height: '40px', background: '#cbd5e1' }} />
+                <div>
+                  <div style={{ fontSize: '28px', fontWeight: '800', color: brand.primaryDark }}>3 Weeks</div>
+                  <div style={{ fontSize: '13px', color: '#64748b' }}>Earlier Detection</div>
+                </div>
+                <div style={{ width: '1px', height: '40px', background: '#cbd5e1' }} />
+                <div>
+                  <div style={{ fontSize: '28px', fontWeight: '800', color: brand.primaryDark }}>60%</div>
+                  <div style={{ fontSize: '13px', color: '#64748b' }}>Less Tickets</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Dashboard Preview */}
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                background: 'white',
+                borderRadius: '20px',
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)',
+                border: '1px solid #e2e8f0',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  padding: '20px',
+                  background: brand.gradient,
+                  color: 'white'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                    <Brain size={22} />
+                    <div style={{ fontSize: '16px', fontWeight: '700' }}>AI Delay Prediction</div>
+                  </div>
+                  <div style={{ fontSize: '13px', opacity: 0.9 }}>
+                    Analyzing 47 tasks across 12 practices...
+                  </div>
+                </div>
+
+                <div style={{ padding: '20px' }}>
+                  <div style={{
+                    padding: '14px',
+                    background: '#fef2f2',
+                    border: '2px solid #fca5a5',
+                    borderRadius: '10px',
+                    marginBottom: '14px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                      <AlertCircle size={16} color="#dc2626" />
+                      <div style={{ fontSize: '14px', fontWeight: '700', color: '#991b1b' }}>
+                        High Risk: 12-Day Delay Predicted
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#7f1d1d' }}>
+                      Harbor Health Clinic has 3 critical path blockers.
+                    </div>
+                  </div>
+
+                  {['Critical vendor delay', 'Understaffed team', 'Missing compliance docs'].map((risk, i) => (
+                    <div key={i} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px',
+                      background: '#f8fafc',
+                      borderRadius: '6px',
+                      marginBottom: '8px'
+                    }}>
+                      <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444' }} />
+                      <div style={{ fontSize: '13px', color: '#475569' }}>{risk}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Floating Badge */}
+              <div style={{
+                position: 'absolute',
+                top: '-16px',
+                right: '-16px',
+                padding: '10px 18px',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                borderRadius: '999px',
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                color: 'white',
+                fontSize: '13px',
+                fontWeight: '700'
+              }}>
+                <Sparkles size={14} />
+                AI Powered
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Features Section */}
+      <section id="ai" style={{ padding: '80px 40px', background: '#f8fafc' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '6px 16px',
+              background: `${brand.primary}15`,
+              borderRadius: '999px',
+              marginBottom: '20px'
+            }}>
+              <Brain size={16} color={brand.primary} />
+              <span style={{ fontSize: '14px', fontWeight: '700', color: brand.primaryDark }}>5 AI Features</span>
+            </div>
+            <h2 style={{ fontSize: '40px', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>
+              AI That Actually Works
+            </h2>
+            <p style={{ fontSize: '18px', color: '#64748b', maxWidth: '600px', margin: '0 auto' }}>
+              Not gimmicks. Real AI features that save time and prevent costly delays.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+            {[
+              { icon: Brain, title: 'Delay Prediction', desc: 'Predicts delays 2-3 weeks early' },
+              { icon: Zap, title: 'Task Generator', desc: '25-35 tasks in 30 seconds' },
+              { icon: Bot, title: 'AI Assistant', desc: '24/7 chatbot for practices' },
+              { icon: AlertCircle, title: 'Smart Escalation', desc: 'Auto-routes blockers' },
+              { icon: Shield, title: 'Compliance Check', desc: 'State-specific validation' }
+            ].map((f, i) => (
+              <div key={i} style={{
+                padding: '24px',
+                background: 'white',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '12px',
+                  background: brand.gradient,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 16px'
+                }}>
+                  <f.icon size={24} color="white" />
+                </div>
+                <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', marginBottom: '8px' }}>{f.title}</h4>
+                <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section id="features" style={{ padding: '80px 40px', background: 'white' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <h2 style={{ fontSize: '40px', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>
+              Everything Your MSO Needs
+            </h2>
+            <p style={{ fontSize: '18px', color: '#64748b' }}>
+              9 core features for complete implementation management
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+            {[
+              { icon: Target, title: 'Multi-Location Rollouts', desc: 'Cohort-based phased implementations' },
+              { icon: Shield, title: 'State Compliance', desc: 'CA/TX/NY requirements tracking' },
+              { icon: Users, title: 'Stakeholder Assignment', desc: 'Role-based task allocation' },
+              { icon: AlertTriangle, title: 'Auto-Escalation', desc: 'Automatic blocker notifications' },
+              { icon: Building2, title: 'Vendor Coordination', desc: 'SLA tracking & portal access' },
+              { icon: BarChart3, title: 'Health Monitoring', desc: 'Post-launch metrics' },
+              { icon: FileText, title: 'Playbook Library', desc: 'Reusable templates' },
+              { icon: TrendingUp, title: 'Resource Tracking', desc: 'Support time monitoring' },
+              { icon: MessageSquare, title: 'Communication Hub', desc: 'Threaded announcements' }
+            ].map((f, i) => (
+              <div
+                key={i}
+                onMouseEnter={() => setHoveredFeature(i)}
+                onMouseLeave={() => setHoveredFeature(null)}
+                style={{
+                  padding: '28px',
+                  background: hoveredFeature === i ? '#f8fafc' : 'white',
+                  border: `2px solid ${hoveredFeature === i ? brand.primary : '#e2e8f0'}`,
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <div style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '10px',
+                  background: hoveredFeature === i ? brand.gradient : '#f1f5f9',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '16px'
+                }}>
+                  <f.icon size={22} color={hoveredFeature === i ? 'white' : '#64748b'} />
+                </div>
+                <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '8px' }}>{f.title}</h4>
+                <p style={{ fontSize: '14px', color: '#64748b', margin: 0, lineHeight: '1.5' }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section style={{
+        padding: '80px 40px',
+        background: brand.gradient,
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '40px', fontWeight: '800', color: 'white', marginBottom: '20px' }}>
+            Ready to Get Started?
+          </h2>
+          <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.9)', marginBottom: '32px' }}>
+            See why MSOs are switching from Monday.com and Excel to OnboardHealth.
+          </p>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+            <Link to="/signup" style={{
+              padding: '16px 32px',
+              background: 'white',
+              color: brand.primaryDark,
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: '700',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              Sign Up Free
+              <ArrowRight size={18} />
+            </Link>
+            <Link to="/dashboard" style={{
+              padding: '16px 32px',
+              background: 'rgba(255,255,255,0.15)',
+              color: 'white',
+              border: '2px solid rgba(255,255,255,0.3)',
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: '700',
+              textDecoration: 'none'
+            }}>
+              View Demo
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        padding: '40px',
+        background: brand.primaryDark,
+        color: 'rgba(255,255,255,0.7)',
+        textAlign: 'center'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '16px' }}>
+          <CheckCircle2 size={24} color={brand.primaryLight} />
+          <span style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>OnboardHealth</span>
+        </div>
+        <div style={{ fontSize: '14px' }}>
+          © 2025 OnboardHealth. Powered by Diamond Element Consulting.
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+// ============================================================================
+// SIGNUP PAGE COMPONENT
+// ============================================================================
+
+const SignupPage = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', company: '' });
+
+  const brand = {
+    primary: '#0891B2',
+    primaryDark: '#164E63',
+    gradient: 'linear-gradient(135deg, #0891B2 0%, #164E63 100%)',
+    bgGradient: 'linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 50%, #E0F7FA 100%)'
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/dashboard');
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: brand.bgGradient,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '40px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '20px',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+        padding: '48px',
+        width: '100%',
+        maxWidth: '440px'
+      }}>
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{
+            width: '56px',
+            height: '56px',
+            borderRadius: '14px',
+            background: brand.gradient,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 16px'
+          }}>
+            <CheckCircle2 size={32} color="white" />
+          </div>
+          <h1 style={{ fontSize: '24px', fontWeight: '700', color: brand.primaryDark, marginBottom: '8px' }}>
+            OnboardHealth
+          </h1>
+          <h2 style={{ fontSize: '18px', fontWeight: '600', color: brand.primary, marginBottom: '8px' }}>
+            Create Your Account
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748b' }}>
+            Start your free demo in minutes
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+              Full Name
+            </label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              placeholder="John Smith"
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1px solid #d1d5db',
+                fontSize: '15px',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+              Work Email
+            </label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              placeholder="john@company.com"
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1px solid #d1d5db',
+                fontSize: '15px',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+              Company Name
+            </label>
+            <input
+              type="text"
+              value={formData.company}
+              onChange={(e) => setFormData({...formData, company: e.target.value})}
+              placeholder="Your MSO or Practice"
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1px solid #d1d5db',
+                fontSize: '15px',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+              Password
+            </label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              placeholder="Create a password"
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1px solid #d1d5db',
+                fontSize: '15px',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            style={{
+              width: '100%',
+              padding: '14px',
+              background: brand.gradient,
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '16px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              marginBottom: '20px'
+            }}
+          >
+            Create Account
+          </button>
+        </form>
+
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '8px' }}>
+            Already have an account?
+          </p>
+          <Link to="/dashboard" style={{ fontSize: '14px', fontWeight: '600', color: brand.primary, textDecoration: 'none' }}>
+            Sign in instead
+          </Link>
+        </div>
+
+        <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid #e5e7eb', textAlign: 'center' }}>
+          <p style={{ fontSize: '12px', color: '#9ca3af' }}>
+            Powered by OnboardHealth
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
 // APP COMPONENT
 // ============================================================================
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/signup" element={<SignupPage />} />
       <Route path="/dashboard" element={<CorporateDashboard />} />
       <Route path="/practice/:practiceId" element={<PracticeView />} />
       <Route path="/campaign/new" element={<CampaignWizard />} />
