@@ -39,9 +39,17 @@ const AuthContext = createContext(null);
 
 const useAuth = () => useContext(AuthContext);
 
+// Admin credentials - only this email can access admin
+const ADMIN_EMAIL = 'umebianca@gmail.com';
+const ADMIN_PASSWORD = 'OnboardHealth2025!'; // Change this to your preferred password
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem('onboardhealth_user');
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [admin, setAdmin] = useState(() => {
+    const stored = localStorage.getItem('onboardhealth_admin');
     return stored ? JSON.parse(stored) : null;
   });
 
@@ -59,13 +67,31 @@ const AuthProvider = ({ children }) => {
     return { success: false, error: 'Invalid email or access code. Please contact us to request demo access.' };
   };
 
+  const adminLogin = (email, password) => {
+    if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
+      const adminData = { email: ADMIN_EMAIL, isAdmin: true };
+      setAdmin(adminData);
+      localStorage.setItem('onboardhealth_admin', JSON.stringify(adminData));
+      return { success: true };
+    }
+    return { success: false, error: 'Invalid admin credentials.' };
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('onboardhealth_user');
   };
 
+  const adminLogout = () => {
+    setAdmin(null);
+    localStorage.removeItem('onboardhealth_admin');
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{
+      user, login, logout, isAuthenticated: !!user,
+      admin, adminLogin, adminLogout, isAdmin: !!admin
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -77,6 +103,17 @@ const ProtectedRoute = ({ children }) => {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
+// Admin Protected Route Component
+const AdminProtectedRoute = ({ children }) => {
+  const { isAdmin } = useAuth();
+
+  if (!isAdmin) {
+    return <Navigate to="/admin-login" replace />;
   }
 
   return children;
@@ -2378,7 +2415,7 @@ const LandingPage = () => {
           <span style={{ fontSize: '18px', fontWeight: '700', color: 'white' }}>OnboardHealth</span>
         </div>
         <div style={{ fontSize: '14px' }}>
-          © 2025 OnboardHealth. Powered by Diamond Element Consulting.
+          © 2025 OnboardHealth. All rights reserved.
         </div>
       </footer>
     </div>
@@ -2740,7 +2777,7 @@ const SignupPage = () => {
 
         <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid #e5e7eb', textAlign: 'center' }}>
           <p style={{ fontSize: '12px', color: '#9ca3af' }}>
-            Powered by Diamond Element Consulting
+            © 2025 OnboardHealth
           </p>
         </div>
       </div>
@@ -3357,6 +3394,177 @@ const LoginPage = () => {
 };
 
 // ============================================================================
+// ADMIN LOGIN PAGE COMPONENT
+// ============================================================================
+
+const AdminLoginPage = () => {
+  const navigate = useNavigate();
+  const { adminLogin, isAdmin } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const brand = {
+    primary: '#3b82f6',
+    primaryDark: '#2563eb',
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+    bgGradient: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #eff6ff 100%)'
+  };
+
+  // Redirect if already logged in as admin
+  useEffect(() => {
+    if (isAdmin) {
+      navigate('/admin');
+    }
+  }, [isAdmin, navigate]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    const result = adminLogin(email, password);
+
+    if (result.success) {
+      navigate('/admin');
+    } else {
+      setError(result.error);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: brand.bgGradient,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '40px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '20px',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+        padding: '48px',
+        width: '100%',
+        maxWidth: '420px'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{
+            width: '56px',
+            height: '56px',
+            borderRadius: '14px',
+            background: brand.gradient,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 16px'
+          }}>
+            <Shield size={28} color="white" />
+          </div>
+          <h1 style={{ fontSize: '24px', fontWeight: '700', color: brand.primaryDark, marginBottom: '8px' }}>
+            Admin Access
+          </h1>
+          <p style={{ fontSize: '14px', color: '#64748b' }}>
+            Restricted to authorized administrators only
+          </p>
+        </div>
+
+        {error && (
+          <div style={{
+            padding: '12px 16px',
+            background: '#fef2f2',
+            border: '1px solid #fca5a5',
+            borderRadius: '10px',
+            marginBottom: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}>
+            <AlertCircle size={18} color="#dc2626" />
+            <span style={{ fontSize: '14px', color: '#991b1b' }}>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+              Admin Email
+            </label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@example.com"
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1px solid #d1d5db',
+                fontSize: '15px',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+              Password
+            </label>
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1px solid #d1d5db',
+                fontSize: '15px',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '14px',
+              background: loading ? '#94a3b8' : brand.gradient,
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '16px',
+              fontWeight: '700',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              marginBottom: '20px'
+            }}
+          >
+            {loading ? 'Signing in...' : 'Access Admin Panel'}
+          </button>
+        </form>
+
+        <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid #e5e7eb', textAlign: 'center' }}>
+          <Link to="/" style={{ fontSize: '13px', color: '#94a3b8', textDecoration: 'none' }}>
+            ← Back to Home
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
 // APP COMPONENT
 // ============================================================================
 
@@ -3366,7 +3574,12 @@ const AppRoutes = () => {
       <Route path="/" element={<LandingPageFinal />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/admin" element={<AdminPage />} />
+      <Route path="/admin-login" element={<AdminLoginPage />} />
+      <Route path="/admin" element={
+        <AdminProtectedRoute>
+          <AdminPage />
+        </AdminProtectedRoute>
+      } />
       <Route path="/dashboard" element={
         <ProtectedRoute>
           <CorporateDashboard />

@@ -1496,7 +1496,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:bianca@diamondelement.com?subject=Founding MSO Partner Application" style={{
+              <a href="mailto:umebianca@gmail.com?subject=Founding MSO Partner Application" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
@@ -1573,7 +1573,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:bianca@diamondelement.com?subject=OnboardHealth Pilot" style={{
+              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Pilot" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'white',
@@ -1659,7 +1659,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:bianca@diamondelement.com?subject=OnboardHealth Professional Plan" style={{
+              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Professional Plan" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
@@ -1727,7 +1727,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:bianca@diamondelement.com?subject=OnboardHealth Enterprise Inquiry" style={{
+              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Enterprise Inquiry" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'white',
@@ -2236,7 +2236,7 @@ const LandingPageFinal = () => {
               textAlign: 'center',
               marginTop: '40px'
             }}>
-              <a href="mailto:bianca@diamondelement.com?subject=OnboardHealth ROI Discussion" style={{
+              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth ROI Discussion" style={{
                 padding: '18px 40px',
                 background: 'white',
                 color: '#2563eb',
@@ -2291,7 +2291,7 @@ const LandingPageFinal = () => {
             gap: '16px',
             justifyContent: 'center'
           }}>
-            <a href="mailto:bianca@diamondelement.com?subject=OnboardHealth Demo Request" style={{
+            <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Demo Request" style={{
               padding: '18px 40px',
               background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
               color: 'white',
@@ -2356,7 +2356,7 @@ const LandingPageFinal = () => {
             }}>OnboardHealth</div>
           </div>
 
-          <div>© 2025 Diamond Element Consulting. Built for MSO operators who deserve better.</div>
+          <div>© 2025 OnboardHealth. Built for MSO operators who deserve better.</div>
         </div>
       </footer>
     </div>
