@@ -15,7 +15,7 @@ import {
   isAIEnabled, getAIStatusMessage, predictImplementationDelay,
   generateTaskDescriptions, getAssistantResponse, analyzeEscalation, analyzeComplianceDocument
 } from './aiHelpers';
-import LandingPageOptimized from './LandingPageOptimized';
+import LandingPageFinal from './LandingPageFinal';
 
 // ============================================================================
 // EMAILJS CONFIGURATION - Replace with your actual keys
@@ -3363,7 +3363,7 @@ const LoginPage = () => {
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<LandingPageOptimized />} />
+      <Route path="/" element={<LandingPageFinal />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/admin" element={<AdminPage />} />
