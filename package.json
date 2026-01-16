@@ -11,6 +11,7 @@
     "server": "node server.cjs"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@hubspot/api-client": "^13.4.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
