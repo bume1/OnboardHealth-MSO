@@ -1472,7 +1472,7 @@ const LandingPageOptimized = () => {
                   </div>
                   <div style={{
                     fontSize: '14px',
-                    opacity: 0.9'
+                    opacity: 0.9
                   }}>
                     Payback Period
                   </div>
