@@ -15,7 +15,7 @@ import {
   isAIEnabled, getAIStatusMessage, predictImplementationDelay,
   generateTaskDescriptions, getAssistantResponse, analyzeEscalation, analyzeComplianceDocument
 } from './aiHelpers';
-import LandingPageFinal from './LandingPageFinal';
+import LandingPageFinal from './LandingPageFinalV2';
 
 // ============================================================================
 // EMAILJS CONFIGURATION - Replace with your actual keys
