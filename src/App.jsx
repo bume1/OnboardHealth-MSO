@@ -1828,13 +1828,13 @@ const LandingPage = () => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
   const [activeTab, setActiveTab] = useState('predict');
 
-  // Teal brand colors matching the login page
+  // Blue brand colors matching the dashboard
   const brand = {
-    primary: '#0891B2',
-    primaryDark: '#164E63',
-    primaryLight: '#22D3EE',
-    gradient: 'linear-gradient(135deg, #0891B2 0%, #164E63 100%)',
-    bgGradient: 'linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 50%, #E0F7FA 100%)'
+    primary: '#3b82f6',
+    primaryDark: '#2563eb',
+    primaryLight: '#60a5fa',
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+    bgGradient: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #eff6ff 100%)'
   };
 
   return (
@@ -1918,7 +1918,7 @@ const LandingPage = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              boxShadow: '0 4px 12px rgba(8, 145, 178, 0.3)'
+              boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
             }}>
               View Demo
               <ArrowRight size={16} />
@@ -2008,7 +2008,7 @@ const LandingPage = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  boxShadow: '0 8px 24px rgba(8, 145, 178, 0.35)'
+                  boxShadow: '0 8px 24px rgba(59, 130, 246, 0.35)'
                 }}>
                   Get Started Free
                   <ArrowRight size={18} />
@@ -2319,24 +2319,124 @@ const LandingPage = () => {
 };
 
 // ============================================================================
-// SIGNUP PAGE COMPONENT
+// SIGNUP PAGE COMPONENT - Request Demo Form
 // ============================================================================
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', company: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', company: '', phone: '', role: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
 
   const brand = {
-    primary: '#0891B2',
-    primaryDark: '#164E63',
-    gradient: 'linear-gradient(135deg, #0891B2 0%, #164E63 100%)',
-    bgGradient: 'linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 50%, #E0F7FA 100%)'
+    primary: '#3b82f6',
+    primaryDark: '#2563eb',
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+    bgGradient: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #eff6ff 100%)'
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/dashboard');
+    // Save signup to localStorage
+    const signups = JSON.parse(localStorage.getItem('onboardhealth_signups') || '[]');
+    const newSignup = {
+      ...formData,
+      id: Date.now(),
+      submittedAt: new Date().toISOString(),
+      status: 'new'
+    };
+    signups.push(newSignup);
+    localStorage.setItem('onboardhealth_signups', JSON.stringify(signups));
+    setSubmitted(true);
   };
+
+  if (submitted) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: brand.bgGradient,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '20px',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+          padding: '48px',
+          width: '100%',
+          maxWidth: '500px',
+          textAlign: 'center'
+        }}>
+          <div style={{
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px'
+          }}>
+            <CheckCircle2 size={40} color="white" />
+          </div>
+          <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#0f172a', marginBottom: '12px' }}>
+            Thank You, {formData.name.split(' ')[0]}!
+          </h1>
+          <p style={{ fontSize: '16px', color: '#64748b', marginBottom: '24px', lineHeight: '1.6' }}>
+            Your demo request has been submitted. We'll reach out within 24 hours to schedule a personalized walkthrough of OnboardHealth.
+          </p>
+          <div style={{
+            padding: '20px',
+            background: '#f8fafc',
+            borderRadius: '12px',
+            marginBottom: '24px',
+            textAlign: 'left'
+          }}>
+            <div style={{ fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '12px' }}>What happens next:</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+              <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: brand.gradient, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '700' }}>1</div>
+              <span style={{ fontSize: '14px', color: '#475569' }}>We'll review your request</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+              <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: brand.gradient, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '700' }}>2</div>
+              <span style={{ fontSize: '14px', color: '#475569' }}>Schedule a demo at your convenience</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: brand.gradient, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '700' }}>3</div>
+              <span style={{ fontSize: '14px', color: '#475569' }}>Get full access to explore the platform</span>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <Link to="/" style={{
+              padding: '12px 24px',
+              background: brand.gradient,
+              color: 'white',
+              borderRadius: '10px',
+              fontSize: '15px',
+              fontWeight: '600',
+              textDecoration: 'none'
+            }}>
+              Back to Home
+            </Link>
+            <Link to="/dashboard" style={{
+              padding: '12px 24px',
+              background: 'white',
+              color: brand.primaryDark,
+              border: '2px solid #e2e8f0',
+              borderRadius: '10px',
+              fontSize: '15px',
+              fontWeight: '600',
+              textDecoration: 'none'
+            }}>
+              Preview Demo
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -2354,7 +2454,7 @@ const SignupPage = () => {
         boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
         padding: '48px',
         width: '100%',
-        maxWidth: '440px'
+        maxWidth: '500px'
       }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -2374,41 +2474,65 @@ const SignupPage = () => {
             OnboardHealth
           </h1>
           <h2 style={{ fontSize: '18px', fontWeight: '600', color: brand.primary, marginBottom: '8px' }}>
-            Create Your Account
+            Request a Demo
           </h2>
           <p style={{ fontSize: '14px', color: '#64748b' }}>
-            Start your free demo in minutes
+            See how OnboardHealth can transform your MSO operations
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              placeholder="John Smith"
-              style={{
-                width: '100%',
-                padding: '12px 14px',
-                borderRadius: '10px',
-                border: '1px solid #d1d5db',
-                fontSize: '15px',
-                outline: 'none',
-                boxSizing: 'border-box'
-              }}
-            />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+                Full Name *
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                placeholder="John Smith"
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #d1d5db',
+                  fontSize: '15px',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                placeholder="(555) 123-4567"
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #d1d5db',
+                  fontSize: '15px',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
           </div>
 
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
-              Work Email
+              Work Email *
             </label>
             <input
               type="email"
+              required
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               placeholder="john@company.com"
@@ -2424,36 +2548,65 @@ const SignupPage = () => {
             />
           </div>
 
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
-              Company Name
-            </label>
-            <input
-              type="text"
-              value={formData.company}
-              onChange={(e) => setFormData({...formData, company: e.target.value})}
-              placeholder="Your MSO or Practice"
-              style={{
-                width: '100%',
-                padding: '12px 14px',
-                borderRadius: '10px',
-                border: '1px solid #d1d5db',
-                fontSize: '15px',
-                outline: 'none',
-                boxSizing: 'border-box'
-              }}
-            />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+                Company/MSO Name *
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.company}
+                onChange={(e) => setFormData({...formData, company: e.target.value})}
+                placeholder="Your Organization"
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #d1d5db',
+                  fontSize: '15px',
+                  outline: 'none',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
+                Your Role
+              </label>
+              <select
+                value={formData.role}
+                onChange={(e) => setFormData({...formData, role: e.target.value})}
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #d1d5db',
+                  fontSize: '15px',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  background: 'white'
+                }}
+              >
+                <option value="">Select role...</option>
+                <option value="ceo">CEO / Executive</option>
+                <option value="coo">COO / Operations</option>
+                <option value="pm">Project Manager</option>
+                <option value="it">IT Director</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
           </div>
 
           <div style={{ marginBottom: '24px' }}>
             <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#374151', marginBottom: '6px' }}>
-              Password
+              Tell us about your needs
             </label>
-            <input
-              type="password"
-              value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-              placeholder="Create a password"
+            <textarea
+              value={formData.message}
+              onChange={(e) => setFormData({...formData, message: e.target.value})}
+              placeholder="What challenges are you looking to solve? How many practices do you manage?"
+              rows={3}
               style={{
                 width: '100%',
                 padding: '12px 14px',
@@ -2461,7 +2614,8 @@ const SignupPage = () => {
                 border: '1px solid #d1d5db',
                 fontSize: '15px',
                 outline: 'none',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                resize: 'vertical'
               }}
             />
           </div>
@@ -2478,26 +2632,268 @@ const SignupPage = () => {
               fontSize: '16px',
               fontWeight: '700',
               cursor: 'pointer',
-              marginBottom: '20px'
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
             }}
           >
-            Create Account
+            Request Demo
+            <ArrowRight size={18} />
           </button>
         </form>
 
         <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '8px' }}>
-            Already have an account?
-          </p>
           <Link to="/dashboard" style={{ fontSize: '14px', fontWeight: '600', color: brand.primary, textDecoration: 'none' }}>
-            Sign in instead
+            Or preview the demo now →
           </Link>
         </div>
 
-        <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid #e5e7eb', textAlign: 'center' }}>
+        <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid #e5e7eb', textAlign: 'center' }}>
           <p style={{ fontSize: '12px', color: '#9ca3af' }}>
-            Powered by OnboardHealth
+            Powered by Diamond Element Consulting
           </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// ADMIN PAGE - View Signups
+// ============================================================================
+
+const AdminPage = () => {
+  const navigate = useNavigate();
+  const [signups, setSignups] = useState([]);
+  const [filter, setFilter] = useState('all');
+
+  const brand = {
+    primary: '#3b82f6',
+    primaryDark: '#2563eb',
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+  };
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('onboardhealth_signups') || '[]');
+    setSignups(stored.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)));
+  }, []);
+
+  const updateStatus = (id, status) => {
+    const updated = signups.map(s => s.id === id ? {...s, status} : s);
+    setSignups(updated);
+    localStorage.setItem('onboardhealth_signups', JSON.stringify(updated));
+  };
+
+  const deleteSignup = (id) => {
+    const updated = signups.filter(s => s.id !== id);
+    setSignups(updated);
+    localStorage.setItem('onboardhealth_signups', JSON.stringify(updated));
+  };
+
+  const filteredSignups = filter === 'all' ? signups : signups.filter(s => s.status === filter);
+
+  const statusColors = {
+    new: { bg: '#dbeafe', color: '#1d4ed8' },
+    contacted: { bg: '#fef3c7', color: '#b45309' },
+    scheduled: { bg: '#d1fae5', color: '#047857' },
+    completed: { bg: '#f3f4f6', color: '#6b7280' }
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: '#f8fafc',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      {/* Header */}
+      <div style={{
+        background: 'white',
+        borderBottom: '1px solid #e2e8f0',
+        padding: '16px 40px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            background: brand.gradient,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <CheckCircle2 size={22} color="white" />
+          </div>
+          <div>
+            <div style={{ fontSize: '18px', fontWeight: '700', color: brand.primaryDark }}>OnboardHealth Admin</div>
+            <div style={{ fontSize: '13px', color: '#64748b' }}>Demo Request Management</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <Link to="/dashboard" style={{
+            padding: '10px 20px',
+            background: 'white',
+            color: brand.primaryDark,
+            border: '1px solid #e2e8f0',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            textDecoration: 'none'
+          }}>
+            View Demo
+          </Link>
+          <Link to="/" style={{
+            padding: '10px 20px',
+            background: brand.gradient,
+            color: 'white',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            textDecoration: 'none'
+          }}>
+            Landing Page
+          </Link>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ padding: '32px 40px', maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '32px' }}>
+          {[
+            { label: 'Total Requests', value: signups.length, color: brand.primary },
+            { label: 'New', value: signups.filter(s => s.status === 'new').length, color: '#3b82f6' },
+            { label: 'Contacted', value: signups.filter(s => s.status === 'contacted').length, color: '#f59e0b' },
+            { label: 'Scheduled', value: signups.filter(s => s.status === 'scheduled').length, color: '#10b981' }
+          ].map((stat, i) => (
+            <div key={i} style={{
+              background: 'white',
+              borderRadius: '12px',
+              padding: '20px',
+              border: '1px solid #e2e8f0'
+            }}>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: stat.color }}>{stat.value}</div>
+              <div style={{ fontSize: '14px', color: '#64748b' }}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Filters */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+          {['all', 'new', 'contacted', 'scheduled', 'completed'].map(f => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '8px',
+                border: 'none',
+                background: filter === f ? brand.gradient : '#f1f5f9',
+                color: filter === f ? 'white' : '#64748b',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                textTransform: 'capitalize'
+              }}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        {/* Table */}
+        <div style={{
+          background: 'white',
+          borderRadius: '12px',
+          border: '1px solid #e2e8f0',
+          overflow: 'hidden'
+        }}>
+          {filteredSignups.length === 0 ? (
+            <div style={{ padding: '60px', textAlign: 'center' }}>
+              <Users size={48} color="#cbd5e1" style={{ marginBottom: '16px' }} />
+              <div style={{ fontSize: '16px', color: '#64748b' }}>No demo requests yet</div>
+              <p style={{ fontSize: '14px', color: '#94a3b8', marginTop: '8px' }}>
+                Share your landing page to start receiving requests
+              </p>
+            </div>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ background: '#f8fafc' }}>
+                  <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: '13px', fontWeight: '600', color: '#475569', borderBottom: '1px solid #e2e8f0' }}>Contact</th>
+                  <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: '13px', fontWeight: '600', color: '#475569', borderBottom: '1px solid #e2e8f0' }}>Company</th>
+                  <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: '13px', fontWeight: '600', color: '#475569', borderBottom: '1px solid #e2e8f0' }}>Message</th>
+                  <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: '13px', fontWeight: '600', color: '#475569', borderBottom: '1px solid #e2e8f0' }}>Date</th>
+                  <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: '13px', fontWeight: '600', color: '#475569', borderBottom: '1px solid #e2e8f0' }}>Status</th>
+                  <th style={{ padding: '14px 20px', textAlign: 'right', fontSize: '13px', fontWeight: '600', color: '#475569', borderBottom: '1px solid #e2e8f0' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredSignups.map(signup => (
+                  <tr key={signup.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '16px 20px' }}>
+                      <div style={{ fontWeight: '600', color: '#0f172a', marginBottom: '2px' }}>{signup.name}</div>
+                      <div style={{ fontSize: '13px', color: '#64748b' }}>{signup.email}</div>
+                      {signup.phone && <div style={{ fontSize: '13px', color: '#64748b' }}>{signup.phone}</div>}
+                    </td>
+                    <td style={{ padding: '16px 20px' }}>
+                      <div style={{ fontWeight: '500', color: '#374151' }}>{signup.company}</div>
+                      {signup.role && <div style={{ fontSize: '13px', color: '#64748b', textTransform: 'capitalize' }}>{signup.role}</div>}
+                    </td>
+                    <td style={{ padding: '16px 20px', maxWidth: '200px' }}>
+                      <div style={{ fontSize: '13px', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {signup.message || '-'}
+                      </div>
+                    </td>
+                    <td style={{ padding: '16px 20px', fontSize: '13px', color: '#64748b' }}>
+                      {new Date(signup.submittedAt).toLocaleDateString()}
+                    </td>
+                    <td style={{ padding: '16px 20px' }}>
+                      <select
+                        value={signup.status}
+                        onChange={(e) => updateStatus(signup.id, e.target.value)}
+                        style={{
+                          padding: '6px 12px',
+                          borderRadius: '6px',
+                          border: 'none',
+                          background: statusColors[signup.status]?.bg || '#f1f5f9',
+                          color: statusColors[signup.status]?.color || '#64748b',
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="completed">Completed</option>
+                      </select>
+                    </td>
+                    <td style={{ padding: '16px 20px', textAlign: 'right' }}>
+                      <button
+                        onClick={() => deleteSignup(signup.id)}
+                        style={{
+                          padding: '6px 12px',
+                          borderRadius: '6px',
+                          border: '1px solid #fca5a5',
+                          background: '#fef2f2',
+                          color: '#dc2626',
+                          fontSize: '13px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>
@@ -2513,6 +2909,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/admin" element={<AdminPage />} />
       <Route path="/dashboard" element={<CorporateDashboard />} />
       <Route path="/practice/:practiceId" element={<PracticeView />} />
       <Route path="/campaign/new" element={<CampaignWizard />} />
