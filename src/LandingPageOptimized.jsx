@@ -640,7 +640,7 @@ const LandingPageOptimized = () => {
                   fontWeight: '700',
                   color: '#0f172a'
                 }}>
-                  that kill most implementations
+                  that kill implementations
                 </div>
               </div>
             </div>
