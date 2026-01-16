@@ -415,13 +415,6 @@ const LandingPageFinal = () => {
                 </Link>
               </div>
 
-              <div style={{
-                fontSize: '14px',
-                color: '#94a3b8',
-                fontWeight: '500'
-              }}>
-                Trusted by MSOs managing 200+ practices nationwide
-              </div>
             </div>
           </div>
 
