@@ -690,18 +690,6 @@ const LandingPageOptimized = () => {
           </div>
 
           {/* Social Proof */}
-          <div style={{
-            textAlign: 'center',
-            marginTop: '48px'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              color: '#64748b',
-              marginBottom: '12px'
-            }}>
-              ⭐ Trusted by MSOs managing 200+ practices nationwide
-            </div>
-          </div>
         </div>
       </section>
 
