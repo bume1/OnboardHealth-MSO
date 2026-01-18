@@ -1212,7 +1212,7 @@ const LandingPageFinal = () => {
           }}>
             {[
               { icon: MapPin, title: 'Multi-Location Rollouts', desc: 'Cohort-based phased implementations' },
-              { icon: Shield, title: 'State Compliance', desc: 'CA/TX/NY requirements tracking' },
+              { icon: Shield, title: 'State Compliance', desc: 'All 50 states requirements tracking' },
               { icon: UserCheck, title: 'Stakeholder Assignment', desc: 'Role-based task allocation' },
               { icon: Bell, title: 'Auto-Escalation', desc: 'Automatic blocker notifications' },
               { icon: Network, title: 'Vendor Coordination', desc: 'SLA tracking & portal access' },
@@ -1366,11 +1366,11 @@ const LandingPageFinal = () => {
                 icon: Shield,
                 color: '#dc2626',
                 title: 'Compliance Document Analyzer',
-                subtitle: 'State-specific validation (CA/TX/NY)',
+                subtitle: 'State-specific validation (all 50 states)',
                 savings: 'Prevents $20K in remediation costs',
                 replaces: 'Compliance officer review time',
                 features: [
-                  'Verifies CA CPOM, TX DEA, NY privileges',
+                  'Verifies state-specific requirements across all 50 states',
                   'Catches missing docs before go-live',
                   'Checks file completeness',
                   'Flags expiration dates'
@@ -1885,7 +1885,7 @@ const LandingPageFinal = () => {
               {[
                 { icon: Brain, label: 'Healthcare-Specific AI', desc: 'Built for MSO workflows' },
                 { icon: TrendingUp, label: 'Proven ROI', desc: 'Reduce costs by 70%' },
-                { icon: Shield, label: 'Compliance Ready', desc: 'CA, TX, NY requirements' }
+                { icon: Shield, label: 'Compliance Ready', desc: 'All 50 states covered' }
               ].map((item, i) => (
                 <div key={i} style={{ textAlign: 'center' }}>
                   <div style={{
