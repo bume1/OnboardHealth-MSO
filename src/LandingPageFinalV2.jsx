@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Rocket, 
+import {
+  Rocket,
   Brain,
   Shield,
   TrendingUp,
@@ -27,14 +27,49 @@ import {
   BookOpen,
   LineChart,
   MessageSquare,
-  Check
+  Check,
+  Menu,
+  X
 } from 'lucide-react';
+
+// ============================================================================
+// RESPONSIVE HOOK
+// ============================================================================
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return {
+    ...windowSize,
+    isMobile: windowSize.width < 768,
+    isTablet: windowSize.width >= 768 && windowSize.width < 1024,
+    isDesktop: windowSize.width >= 1024,
+  };
+};
 
 // ============================================================================
 // FINAL LANDING PAGE - WITH RECOMMENDED BRANDING + 9 FEATURES + PRICING
 // ============================================================================
 
 const LandingPageFinal = () => {
+  const { isMobile, isTablet, isDesktop, width } = useWindowSize();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [calculatorInputs, setCalculatorInputs] = useState({
     implementationsPerYear: 10
   });
@@ -67,81 +102,100 @@ const LandingPageFinal = () => {
         background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(10px)',
         borderBottom: '1px solid #e2e8f0',
-        padding: '20px 0'
+        padding: isMobile ? '12px 0' : '20px 0'
       }}>
         <div style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: '0 40px',
+          padding: isMobile ? '0 16px' : '0 40px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
-              width: '44px',
-              height: '44px',
+              width: isMobile ? '36px' : '44px',
+              height: isMobile ? '36px' : '44px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <CheckCircle2 size={24} color="white" strokeWidth={3} />
+              <CheckCircle2 size={isMobile ? 20 : 24} color="white" strokeWidth={3} />
             </div>
             <div>
               <div style={{
-                fontSize: '22px',
+                fontSize: isMobile ? '18px' : '22px',
                 fontWeight: '700',
                 color: '#0f172a',
                 lineHeight: '1'
               }}>
                 OnboardHealth
               </div>
-              <div style={{
-                fontSize: '11px',
-                fontWeight: '600',
-                color: '#64748b',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-                marginTop: '2px'
-              }}>
-                MSO Edition
-              </div>
+              {!isMobile && (
+                <div style={{
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  color: '#64748b',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  marginTop: '2px'
+                }}>
+                  MSO Edition
+                </div>
+              )}
             </div>
           </div>
 
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '40px'
-          }}>
-            <a href="#features" style={{
-              fontSize: '15px',
-              fontWeight: '600',
-              color: '#475569',
-              textDecoration: 'none'
-            }}>Features</a>
-            <a href="#pricing" style={{
-              fontSize: '15px',
-              fontWeight: '600',
-              color: '#475569',
-              textDecoration: 'none'
-            }}>Pricing</a>
-            <a href="#roi" style={{
-              fontSize: '15px',
-              fontWeight: '600',
-              color: '#475569',
-              textDecoration: 'none'
-            }}>ROI Calculator</a>
-            <Link to="/dashboard" style={{
-              padding: '12px 28px',
-              background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
-              color: 'white',
-              borderRadius: '10px',
-              fontSize: '15px',
-              fontWeight: '700',
-              textDecoration: 'none',
+          {/* Mobile Menu Button */}
+          {isMobile && (
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '8px'
+              }}
+            >
+              {mobileMenuOpen ? <X size={24} color="#0f172a" /> : <Menu size={24} color="#0f172a" />}
+            </button>
+          )}
+
+          {/* Desktop Navigation */}
+          {!isMobile && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: isTablet ? '24px' : '40px'
+            }}>
+              <a href="#features" style={{
+                fontSize: '15px',
+                fontWeight: '600',
+                color: '#475569',
+                textDecoration: 'none'
+              }}>Features</a>
+              <a href="#pricing" style={{
+                fontSize: '15px',
+                fontWeight: '600',
+                color: '#475569',
+                textDecoration: 'none'
+              }}>Pricing</a>
+              <a href="#roi" style={{
+                fontSize: '15px',
+                fontWeight: '600',
+                color: '#475569',
+                textDecoration: 'none'
+              }}>ROI Calculator</a>
+              <Link to="/login" style={{
+                padding: '12px 28px',
+                background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+                color: 'white',
+                borderRadius: '10px',
+                fontSize: '15px',
+                fontWeight: '700',
+                textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
@@ -151,15 +205,67 @@ const LandingPageFinal = () => {
               View Demo
               <ArrowRight size={16} />
             </Link>
-          </div>
+            </div>
+          )}
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobile && mobileMenuOpen && (
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            background: 'white',
+            borderBottom: '1px solid #e2e8f0',
+            padding: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          }}>
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#475569',
+              textDecoration: 'none',
+              padding: '8px 0'
+            }}>Features</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#475569',
+              textDecoration: 'none',
+              padding: '8px 0'
+            }}>Pricing</a>
+            <a href="#roi" onClick={() => setMobileMenuOpen(false)} style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#475569',
+              textDecoration: 'none',
+              padding: '8px 0'
+            }}>ROI Calculator</a>
+            <Link to="/login" onClick={() => setMobileMenuOpen(false)} style={{
+              padding: '14px 24px',
+              background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+              color: 'white',
+              borderRadius: '10px',
+              fontSize: '16px',
+              fontWeight: '700',
+              textDecoration: 'none',
+              textAlign: 'center'
+            }}>
+              View Demo
+            </Link>
+          </div>
+        )}
       </nav>
 
 
       {/* HERO SECTION - CLEAN LAYOUT: AI LEFT, HEADLINE RIGHT, COST BOTTOM */}
       <section style={{
         background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
-        padding: '100px 40px 120px',
+        padding: isMobile ? '40px 16px 60px' : '100px 40px 120px',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -172,10 +278,10 @@ const LandingPageFinal = () => {
           {/* TOP: AI Demo + Headline */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '500px 1fr',
-            gap: '80px',
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr' : '500px 1fr',
+            gap: isMobile ? '32px' : '80px',
             alignItems: 'center',
-            marginBottom: '80px'
+            marginBottom: isMobile ? '40px' : '80px'
           }}>
             {/* LEFT: AI Delay Prediction */}
             <div>
@@ -340,12 +446,12 @@ const LandingPageFinal = () => {
               </div>
 
               <h1 style={{
-                fontSize: '58px',
+                fontSize: isMobile ? '28px' : isTablet ? '40px' : '58px',
                 fontWeight: '800',
                 color: '#0f172a',
                 lineHeight: '1.1',
                 letterSpacing: '-0.02em',
-                marginBottom: '28px'
+                marginBottom: isMobile ? '20px' : '28px'
               }}>
                 Your Team Just Burned{' '}
                 <span style={{
@@ -445,8 +551,8 @@ const LandingPageFinal = () => {
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '24px',
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+              gap: isMobile ? '16px' : '24px',
               maxWidth: '1000px',
               margin: '0 auto 32px'
             }}>
@@ -505,13 +611,15 @@ const LandingPageFinal = () => {
             <div style={{
               maxWidth: '700px',
               margin: '0 auto',
-              padding: '24px 40px',
+              padding: isMobile ? '20px' : '24px 40px',
               background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
               borderRadius: '16px',
               border: '1px solid #fecaca',
               display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: isMobile ? 'flex-start' : 'center',
+              gap: isMobile ? '16px' : '0'
             }}>
               <div>
                 <div style={{
@@ -523,7 +631,7 @@ const LandingPageFinal = () => {
                   Total Waste Per Implementation
                 </div>
                 <div style={{
-                  fontSize: '48px',
+                  fontSize: isMobile ? '32px' : '48px',
                   fontWeight: '800',
                   color: '#dc2626'
                 }}>
@@ -531,7 +639,7 @@ const LandingPageFinal = () => {
                 </div>
               </div>
               <div style={{
-                textAlign: 'right'
+                textAlign: isMobile ? 'left' : 'right'
               }}>
                 <div style={{
                   fontSize: '14px',
@@ -542,7 +650,7 @@ const LandingPageFinal = () => {
                   OnboardHealth Saves
                 </div>
                 <div style={{
-                  fontSize: '36px',
+                  fontSize: isMobile ? '28px' : '36px',
                   fontWeight: '800',
                   color: '#10b981'
                 }}>
@@ -561,7 +669,7 @@ const LandingPageFinal = () => {
       </section>
       {/* THE COORDINATION TAX - HEADLINE 3 */}
       <section id="proof" style={{
-        padding: '100px 40px',
+        padding: isMobile ? '48px 16px' : isTablet ? '60px 24px' : '100px 40px',
         background: 'white'
       }}>
         <div style={{
@@ -593,10 +701,10 @@ const LandingPageFinal = () => {
             </div>
 
             <h2 style={{
-              fontSize: '48px',
+              fontSize: isMobile ? '24px' : isTablet ? '32px' : '48px',
               fontWeight: '800',
               color: '#0f172a',
-              marginBottom: '24px',
+              marginBottom: isMobile ? '16px' : '24px',
               lineHeight: '1.2'
             }}>
               Stop Spending 800+ Hours Per Implementation
@@ -619,9 +727,9 @@ const LandingPageFinal = () => {
           {/* Pain Points Grid */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '32px',
-            marginBottom: '64px'
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+            gap: isMobile ? '20px' : '32px',
+            marginBottom: isMobile ? '40px' : '64px'
           }}>
             {[
               {
@@ -712,39 +820,40 @@ const LandingPageFinal = () => {
 
           {/* Solution Callout */}
           <div style={{
-            padding: '48px',
+            padding: isMobile ? '24px 16px' : '48px',
             background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
             borderRadius: '20px',
             border: '2px solid #93c5fd',
             textAlign: 'center'
           }}>
             <div style={{
-              fontSize: '32px',
+              fontSize: isMobile ? '22px' : '32px',
               fontWeight: '800',
               color: '#0f172a',
-              marginBottom: '16px'
+              marginBottom: isMobile ? '12px' : '16px'
             }}>
               OnboardHealth Replaces All of This
             </div>
             <div style={{
-              fontSize: '18px',
+              fontSize: isMobile ? '15px' : '18px',
               color: '#475569',
               lineHeight: '1.6',
               maxWidth: '800px',
-              margin: '0 auto 32px'
+              margin: isMobile ? '0 auto 20px' : '0 auto 32px'
             }}>
               The spreadsheets. The status meetings. The vendor chase calls. The firefighting.
-              <br />
-              All replaced with AI-powered automation.
+              {!isMobile && <br />}
+              {isMobile ? ' ' : ''}All replaced with AI-powered automation.
             </div>
             <div style={{
               display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'center',
-              gap: '48px'
+              gap: isMobile ? '20px' : '48px'
             }}>
               <div>
                 <div style={{
-                  fontSize: '48px',
+                  fontSize: isMobile ? '32px' : '48px',
                   fontWeight: '800',
                   color: '#2563eb'
                 }}>
@@ -759,7 +868,7 @@ const LandingPageFinal = () => {
               </div>
               <div>
                 <div style={{
-                  fontSize: '48px',
+                  fontSize: isMobile ? '32px' : '48px',
                   fontWeight: '800',
                   color: '#10b981'
                 }}>
@@ -774,7 +883,7 @@ const LandingPageFinal = () => {
               </div>
               <div>
                 <div style={{
-                  fontSize: '48px',
+                  fontSize: isMobile ? '32px' : '48px',
                   fontWeight: '800',
                   color: '#8b5cf6'
                 }}>
@@ -794,7 +903,7 @@ const LandingPageFinal = () => {
 
       {/* DASHBOARD PROOF SECTION */}
       <section style={{
-        padding: '100px 40px',
+        padding: isMobile ? '48px 16px' : isTablet ? '60px 24px' : '100px 40px',
         background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)'
       }}>
         <div style={{
@@ -806,10 +915,10 @@ const LandingPageFinal = () => {
             marginBottom: '64px'
           }}>
             <h2 style={{
-              fontSize: '48px',
+              fontSize: isMobile ? '24px' : isTablet ? '32px' : '48px',
               fontWeight: '800',
               color: '#0f172a',
-              marginBottom: '20px'
+              marginBottom: isMobile ? '12px' : '20px'
             }}>
               See the Platform in Action
             </h2>
@@ -1066,7 +1175,7 @@ const LandingPageFinal = () => {
 
       {/* 9 CORE FEATURES SECTION */}
       <section id="features" style={{
-        padding: '100px 40px',
+        padding: isMobile ? '48px 16px' : isTablet ? '60px 24px' : '100px 40px',
         background: 'white'
       }}>
         <div style={{
@@ -1078,10 +1187,10 @@ const LandingPageFinal = () => {
             marginBottom: '64px'
           }}>
             <h2 style={{
-              fontSize: '48px',
+              fontSize: isMobile ? '24px' : isTablet ? '32px' : '48px',
               fontWeight: '800',
               color: '#0f172a',
-              marginBottom: '20px'
+              marginBottom: isMobile ? '12px' : '20px'
             }}>
               Everything Your MSO Needs
             </h2>
@@ -1097,9 +1206,9 @@ const LandingPageFinal = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '32px',
-            marginBottom: '80px'
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+            gap: isMobile ? '16px' : '32px',
+            marginBottom: isMobile ? '40px' : '80px'
           }}>
             {[
               { icon: MapPin, title: 'Multi-Location Rollouts', desc: 'Cohort-based phased implementations' },
@@ -1175,10 +1284,10 @@ const LandingPageFinal = () => {
               </span>
             </div>
             <h3 style={{
-              fontSize: '40px',
+              fontSize: isMobile ? '22px' : isTablet ? '28px' : '40px',
               fontWeight: '800',
               color: '#0f172a',
-              marginBottom: '16px'
+              marginBottom: isMobile ? '12px' : '16px'
             }}>
               AI That Eliminates $180K of Waste
             </h3>
@@ -1277,9 +1386,10 @@ const LandingPageFinal = () => {
                 transition: 'all 0.3s'
               }}>
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'auto 1fr auto',
-                  gap: '32px',
+                  display: isMobile ? 'flex' : 'grid',
+                  flexDirection: 'column',
+                  gridTemplateColumns: isMobile ? '1fr' : 'auto 1fr auto',
+                  gap: isMobile ? '20px' : '32px',
                   alignItems: 'start'
                 }}>
                   <div style={{
@@ -1331,8 +1441,12 @@ const LandingPageFinal = () => {
                   </div>
 
                   <div style={{
-                    minWidth: '200px',
-                    textAlign: 'right'
+                    minWidth: isMobile ? 'auto' : '200px',
+                    width: isMobile ? '100%' : 'auto',
+                    textAlign: isMobile ? 'left' : 'right',
+                    display: isMobile ? 'grid' : 'block',
+                    gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr',
+                    gap: isMobile ? '12px' : '0'
                   }}>
                     <div style={{
                       padding: '16px',
@@ -1391,7 +1505,7 @@ const LandingPageFinal = () => {
 
       {/* PRICING SECTION */}
       <section id="pricing" style={{
-        padding: '100px 40px',
+        padding: isMobile ? '48px 16px' : isTablet ? '60px 24px' : '100px 40px',
         background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)'
       }}>
         <div style={{
@@ -1403,12 +1517,12 @@ const LandingPageFinal = () => {
             marginBottom: '64px'
           }}>
             <h2 style={{
-              fontSize: '48px',
+              fontSize: isMobile ? '24px' : isTablet ? '32px' : '48px',
               fontWeight: '800',
               color: '#0f172a',
-              marginBottom: '20px'
+              marginBottom: isMobile ? '12px' : '20px'
             }}>
-              Transparent Pricing
+              Platform Packages
             </h2>
             <p style={{
               fontSize: '20px',
@@ -1416,21 +1530,21 @@ const LandingPageFinal = () => {
               maxWidth: '700px',
               margin: '0 auto'
             }}>
-              One platform. Three ways to start. All plans include full AI capabilities.
+              Choose the package that fits your MSO. All plans include full AI capabilities.
             </p>
           </div>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '24px',
-            marginBottom: '48px'
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gap: isMobile ? '20px' : '24px',
+            marginBottom: isMobile ? '32px' : '48px'
           }}>
             {/* Founding MSO Partner - LIMITED */}
             <div style={{
               background: 'white',
               borderRadius: '20px',
-              padding: '32px',
+              padding: isMobile ? '24px' : '32px',
               border: '3px solid #14b8a6',
               position: 'relative',
               boxShadow: '0 20px 60px rgba(20, 184, 166, 0.15)'
@@ -1463,12 +1577,12 @@ const LandingPageFinal = () => {
                 Founding Partner
               </div>
               <div style={{
-                fontSize: '40px',
+                fontSize: isMobile ? '24px' : '28px',
                 fontWeight: '800',
                 color: '#0f172a',
                 marginBottom: '4px'
               }}>
-                $15K
+                Limited Offer
               </div>
               <div style={{
                 fontSize: '13px',
@@ -1496,7 +1610,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=Founding MSO Partner Application" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
@@ -1509,8 +1623,8 @@ const LandingPageFinal = () => {
                 boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)',
                 transition: 'all 0.2s'
               }}>
-                Apply Now
-              </a>
+                Request Info
+              </Link>
               <div style={{
                 marginTop: '12px',
                 textAlign: 'center',
@@ -1540,19 +1654,19 @@ const LandingPageFinal = () => {
                 Pilot
               </div>
               <div style={{
-                fontSize: '40px',
+                fontSize: isMobile ? '24px' : '28px',
                 fontWeight: '800',
                 color: '#0f172a',
                 marginBottom: '4px'
               }}>
-                $5K
+                Get Started
               </div>
               <div style={{
                 fontSize: '13px',
                 color: '#64748b',
                 marginBottom: '20px'
               }}>
-                One-time • 1-2 practices
+                1-2 practices
               </div>
               <div style={{
                 marginBottom: '24px'
@@ -1573,7 +1687,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Pilot" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'white',
@@ -1586,8 +1700,8 @@ const LandingPageFinal = () => {
                 textDecoration: 'none',
                 transition: 'all 0.2s'
               }}>
-                Start Pilot
-              </a>
+                Request Demo
+              </Link>
             </div>
 
             {/* Professional - RECOMMENDED */}
@@ -1626,12 +1740,12 @@ const LandingPageFinal = () => {
                 Professional
               </div>
               <div style={{
-                fontSize: '40px',
+                fontSize: isMobile ? '24px' : '28px',
                 fontWeight: '800',
                 color: '#0f172a',
                 marginBottom: '4px'
               }}>
-                $60K
+                Most Popular
               </div>
               <div style={{
                 fontSize: '13px',
@@ -1659,7 +1773,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Professional Plan" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
@@ -1672,8 +1786,8 @@ const LandingPageFinal = () => {
                 boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
                 transition: 'all 0.2s'
               }}>
-                Get Started
-              </a>
+                Request Pricing
+              </Link>
             </div>
 
             {/* Enterprise */}
@@ -1727,7 +1841,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Enterprise Inquiry" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'white',
@@ -1740,249 +1854,93 @@ const LandingPageFinal = () => {
                 textDecoration: 'none',
                 transition: 'all 0.2s'
               }}>
-                Contact Sales
-              </a>
+                Contact Us
+              </Link>
             </div>
           </div>
 
-          {/* Founding Partner Program Details */}
+          {/* Why Choose OnboardHealth */}
           <div style={{
-            padding: '40px',
-            background: 'linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%)',
-            borderRadius: '20px',
-            border: '2px solid #5eead4',
-            marginBottom: '48px'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '24px'
-            }}>
-              <div style={{
-                width: '60px',
-                height: '60px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0
-              }}>
-                <Users size={32} color="white" />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontSize: '24px',
-                  fontWeight: '800',
-                  color: '#0f172a',
-                  marginBottom: '12px'
-                }}>
-                  🌟 Founding MSO Partner Program
-                </div>
-                <div style={{
-                  fontSize: '16px',
-                  color: '#475569',
-                  lineHeight: '1.6',
-                  marginBottom: '20px'
-                }}>
-                  Be one of the first 5 MSOs to shape the future of implementation management. 
-                  Get full platform access at 75% off for 6 months, plus lifetime benefits.
-                </div>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '20px'
-                }}>
-                  <div>
-                    <div style={{
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      color: '#115e59',
-                      marginBottom: '12px'
-                    }}>
-                      What You Get:
-                    </div>
-                    {[
-                      'Full platform access (all 9 core + 5 AI features)',
-                      'Priority support & bi-weekly feedback calls',
-                      'Direct input on roadmap & feature prioritization',
-                      'Forever 25% discount after beta ($45K/year vs $60K)',
-                      'Featured as launch partner (logo + case study)',
-                      'First access to all new features'
-                    ].map((item, i) => (
-                      <div key={i} style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '10px',
-                        marginBottom: '8px',
-                        fontSize: '14px',
-                        color: '#475569'
-                      }}>
-                        <CheckCircle2 size={16} color="#14b8a6" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px' }} />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div>
-                    <div style={{
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      color: '#115e59',
-                      marginBottom: '12px'
-                    }}>
-                      Requirements:
-                    </div>
-                    {[
-                      'Active MSO managing 3+ practices',
-                      'Bi-weekly 30-min feedback sessions',
-                      'Willing to participate in case study',
-                      'Commit to full 6-month partnership'
-                    ].map((item, i) => (
-                      <div key={i} style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '10px',
-                        marginBottom: '8px',
-                        fontSize: '14px',
-                        color: '#475569'
-                      }}>
-                        <Check size={16} color="#14b8a6" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px' }} />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                    <div style={{
-                      marginTop: '20px',
-                      padding: '16px',
-                      background: 'white',
-                      borderRadius: '12px',
-                      border: '2px solid #14b8a6'
-                    }}>
-                      <div style={{
-                        fontSize: '13px',
-                        fontWeight: '700',
-                        color: '#0d9488',
-                        marginBottom: '4px'
-                      }}>
-                        Your Investment:
-                      </div>
-                      <div style={{
-                        fontSize: '32px',
-                        fontWeight: '800',
-                        color: '#14b8a6',
-                        marginBottom: '4px'
-                      }}>
-                        $15,000
-                      </div>
-                      <div style={{
-                        fontSize: '13px',
-                        color: '#64748b'
-                      }}>
-                        6 months • Then $45K/year (25% off forever)
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div style={{
-                  marginTop: '24px',
-                  padding: '16px',
-                  background: '#fef2f2',
-                  borderRadius: '12px',
-                  border: '1px solid #fecaca',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}>
-                  <Clock size={20} color="#dc2626" />
-                  <div>
-                    <span style={{
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      color: '#991b1b'
-                    }}>
-                      Limited Time:
-                    </span>
-                    <span style={{
-                      fontSize: '14px',
-                      color: '#7f1d1d',
-                      marginLeft: '8px'
-                    }}>
-                      Program expires March 31, 2026 • Only 3 spots remaining
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Pricing Comparison */}
-          <div style={{
-            padding: '40px',
+            padding: isMobile ? '24px 16px' : '40px',
             background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
             borderRadius: '20px',
             border: '2px solid #93c5fd',
             textAlign: 'center'
           }}>
             <div style={{
-              fontSize: '24px',
+              fontSize: isMobile ? '18px' : '24px',
               fontWeight: '700',
               color: '#0f172a',
-              marginBottom: '16px'
+              marginBottom: isMobile ? '12px' : '16px'
             }}>
-              vs Monday.com: 75% Less Expensive
+              Why Choose OnboardHealth?
             </div>
             <div style={{
               display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'center',
-              gap: '64px',
-              marginBottom: '16px'
+              gap: isMobile ? '16px' : '48px',
+              marginBottom: isMobile ? '16px' : '24px'
             }}>
-              <div>
-                <div style={{
-                  fontSize: '14px',
-                  color: '#64748b',
-                  marginBottom: '4px'
-                }}>
-                  Monday.com (15 practices)
+              {[
+                { icon: Brain, label: 'Healthcare-Specific AI', desc: 'Built for MSO workflows' },
+                { icon: TrendingUp, label: 'Proven ROI', desc: 'Reduce costs by 70%' },
+                { icon: Shield, label: 'Compliance Ready', desc: 'CA, TX, NY requirements' }
+              ].map((item, i) => (
+                <div key={i} style={{ textAlign: 'center' }}>
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
+                    background: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 12px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                  }}>
+                    <item.icon size={24} color="#2563eb" />
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '700',
+                    color: '#0f172a',
+                    marginBottom: '4px'
+                  }}>
+                    {item.label}
+                  </div>
+                  <div style={{
+                    fontSize: '14px',
+                    color: '#64748b'
+                  }}>
+                    {item.desc}
+                  </div>
                 </div>
-                <div style={{
-                  fontSize: '32px',
-                  fontWeight: '800',
-                  color: '#dc2626',
-                  textDecoration: 'line-through'
-                }}>
-                  $240K/year
-                </div>
-              </div>
-              <div>
-                <div style={{
-                  fontSize: '14px',
-                  color: '#64748b',
-                  marginBottom: '4px'
-                }}>
-                  OnboardHealth (15 practices)
-                </div>
-                <div style={{
-                  fontSize: '32px',
-                  fontWeight: '800',
-                  color: '#10b981'
-                }}>
-                  $60K/year
-                </div>
-              </div>
+              ))}
             </div>
-            <div style={{
+            <Link to="/signup" style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '14px 32px',
+              background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+              color: 'white',
+              borderRadius: '10px',
               fontSize: '16px',
-              color: '#475569'
+              fontWeight: '700',
+              textDecoration: 'none',
+              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
             }}>
-              Plus healthcare-specific AI they don't have
-            </div>
+              Schedule a Demo
+              <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* ROI CALCULATOR SECTION - HEADLINE 2 */}
       <section id="roi" style={{
-        padding: '100px 40px',
+        padding: isMobile ? '48px 16px' : isTablet ? '60px 24px' : '100px 40px',
         background: 'white'
       }}>
         <div style={{
@@ -2014,10 +1972,10 @@ const LandingPageFinal = () => {
             </div>
 
             <h2 style={{
-              fontSize: '48px',
+              fontSize: isMobile ? '24px' : isTablet ? '32px' : '48px',
               fontWeight: '800',
               color: '#0f172a',
-              marginBottom: '24px',
+              marginBottom: isMobile ? '16px' : '24px',
               lineHeight: '1.2'
             }}>
               MSOs Waste $237K-367K Per Practice Implementation.
@@ -2038,8 +1996,8 @@ const LandingPageFinal = () => {
           {/* Interactive Calculator */}
           <div style={{
             background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
-            borderRadius: '24px',
-            padding: '48px',
+            borderRadius: isMobile ? '16px' : '24px',
+            padding: isMobile ? '24px 16px' : '48px',
             border: '2px solid #93c5fd'
           }}>
             <div style={{
@@ -2081,9 +2039,9 @@ const LandingPageFinal = () => {
 
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '32px',
-              marginBottom: '40px'
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+              gap: isMobile ? '16px' : '32px',
+              marginBottom: isMobile ? '24px' : '40px'
             }}>
               <div style={{
                 background: 'white',
@@ -2102,7 +2060,7 @@ const LandingPageFinal = () => {
                   CURRENT ANNUAL COSTS
                 </div>
                 <div style={{
-                  fontSize: '48px',
+                  fontSize: isMobile ? '32px' : '48px',
                   fontWeight: '800',
                   color: '#dc2626',
                   marginBottom: '8px'
@@ -2135,7 +2093,7 @@ const LandingPageFinal = () => {
                   WITH ONBOARDHEALTH (70% AUTOMATION)
                 </div>
                 <div style={{
-                  fontSize: '48px',
+                  fontSize: isMobile ? '32px' : '48px',
                   fontWeight: '800',
                   color: '#10b981',
                   marginBottom: '8px'
@@ -2168,9 +2126,9 @@ const LandingPageFinal = () => {
                 Your Annual Savings
               </div>
               <div style={{
-                fontSize: '72px',
+                fontSize: isMobile ? '40px' : isTablet ? '56px' : '72px',
                 fontWeight: '800',
-                marginBottom: '24px',
+                marginBottom: isMobile ? '16px' : '24px',
                 lineHeight: '1'
               }}>
                 ${(roi.savings / 1000000).toFixed(2)}M
@@ -2178,10 +2136,10 @@ const LandingPageFinal = () => {
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '32px',
-                marginTop: '32px',
-                paddingTop: '32px',
+                gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+                gap: isMobile ? '20px' : '32px',
+                marginTop: isMobile ? '24px' : '32px',
+                paddingTop: isMobile ? '24px' : '32px',
                 borderTop: '1px solid rgba(255, 255, 255, 0.2)'
               }}>
                 <div>
@@ -2259,7 +2217,7 @@ const LandingPageFinal = () => {
 
       {/* Final CTA */}
       <section style={{
-        padding: '100px 40px',
+        padding: isMobile ? '48px 16px' : isTablet ? '60px 24px' : '100px 40px',
         background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
         color: 'white',
         textAlign: 'center'
@@ -2269,9 +2227,9 @@ const LandingPageFinal = () => {
           margin: '0 auto'
         }}>
           <h2 style={{
-            fontSize: '56px',
+            fontSize: isMobile ? '26px' : isTablet ? '36px' : '56px',
             fontWeight: '800',
-            marginBottom: '24px',
+            marginBottom: isMobile ? '16px' : '24px',
             lineHeight: '1.1'
           }}>
             Ready to Stop Wasting $300K Per Implementation?
@@ -2313,7 +2271,7 @@ const LandingPageFinal = () => {
 
       {/* Footer */}
       <footer style={{
-        padding: '60px 40px',
+        padding: isMobile ? '32px 16px' : '60px 40px',
         background: '#0f172a',
         color: '#94a3b8',
         borderTop: '1px solid #1e293b'
@@ -2322,8 +2280,11 @@ const LandingPageFinal = () => {
           maxWidth: '1400px',
           margin: '0 auto',
           display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: isMobile ? 'center' : 'center',
+          gap: isMobile ? '16px' : '0',
+          textAlign: isMobile ? 'center' : 'left'
         }}>
           <div style={{
             display: 'flex',
@@ -2348,7 +2309,7 @@ const LandingPageFinal = () => {
             }}>OnboardHealth</div>
           </div>
 
-          <div>© 2025 Diamond Element Consulting. Built for MSO operators who deserve better.</div>
+          <div style={{ fontSize: isMobile ? '12px' : '14px' }}>© 2025 Diamond Element Consulting. Built for MSO operators who deserve better.</div>
         </div>
       </footer>
     </div>
