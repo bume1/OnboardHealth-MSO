@@ -1522,7 +1522,7 @@ const LandingPageFinal = () => {
               color: '#0f172a',
               marginBottom: isMobile ? '12px' : '20px'
             }}>
-              Transparent Pricing
+              Flexible Plans for Every MSO
             </h2>
             <p style={{
               fontSize: '20px',
@@ -1530,7 +1530,7 @@ const LandingPageFinal = () => {
               maxWidth: '700px',
               margin: '0 auto'
             }}>
-              One platform. Three ways to start. All plans include full AI capabilities.
+              One platform. Multiple ways to start. All plans include full AI capabilities.
             </p>
           </div>
 
@@ -1577,12 +1577,12 @@ const LandingPageFinal = () => {
                 Founding Partner
               </div>
               <div style={{
-                fontSize: '40px',
+                fontSize: isMobile ? '24px' : '28px',
                 fontWeight: '800',
                 color: '#0f172a',
                 marginBottom: '4px'
               }}>
-                $15K
+                Limited Offer
               </div>
               <div style={{
                 fontSize: '13px',
@@ -1610,7 +1610,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=Founding MSO Partner Application" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
@@ -1623,8 +1623,8 @@ const LandingPageFinal = () => {
                 boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)',
                 transition: 'all 0.2s'
               }}>
-                Apply Now
-              </a>
+                Request Info
+              </Link>
               <div style={{
                 marginTop: '12px',
                 textAlign: 'center',
@@ -1654,19 +1654,19 @@ const LandingPageFinal = () => {
                 Pilot
               </div>
               <div style={{
-                fontSize: '40px',
+                fontSize: isMobile ? '24px' : '28px',
                 fontWeight: '800',
                 color: '#0f172a',
                 marginBottom: '4px'
               }}>
-                $5K
+                Get Started
               </div>
               <div style={{
                 fontSize: '13px',
                 color: '#64748b',
                 marginBottom: '20px'
               }}>
-                One-time • 1-2 practices
+                1-2 practices
               </div>
               <div style={{
                 marginBottom: '24px'
@@ -1687,7 +1687,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Pilot" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'white',
@@ -1700,8 +1700,8 @@ const LandingPageFinal = () => {
                 textDecoration: 'none',
                 transition: 'all 0.2s'
               }}>
-                Start Pilot
-              </a>
+                Request Demo
+              </Link>
             </div>
 
             {/* Professional - RECOMMENDED */}
@@ -1740,12 +1740,12 @@ const LandingPageFinal = () => {
                 Professional
               </div>
               <div style={{
-                fontSize: '40px',
+                fontSize: isMobile ? '24px' : '28px',
                 fontWeight: '800',
                 color: '#0f172a',
                 marginBottom: '4px'
               }}>
-                $60K
+                Most Popular
               </div>
               <div style={{
                 fontSize: '13px',
@@ -1773,7 +1773,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Professional Plan" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
@@ -1786,8 +1786,8 @@ const LandingPageFinal = () => {
                 boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
                 transition: 'all 0.2s'
               }}>
-                Get Started
-              </a>
+                Request Pricing
+              </Link>
             </div>
 
             {/* Enterprise */}
@@ -1841,7 +1841,7 @@ const LandingPageFinal = () => {
                   </div>
                 ))}
               </div>
-              <a href="mailto:umebianca@gmail.com?subject=OnboardHealth Enterprise Inquiry" style={{
+              <Link to="/signup" style={{
                 display: 'block',
                 padding: '12px',
                 background: 'white',
@@ -1854,8 +1854,8 @@ const LandingPageFinal = () => {
                 textDecoration: 'none',
                 transition: 'all 0.2s'
               }}>
-                Contact Sales
-              </a>
+                Contact Us
+              </Link>
             </div>
           </div>
 
@@ -1920,7 +1920,7 @@ const LandingPageFinal = () => {
                       'Full platform access (all 9 core + 5 AI features)',
                       'Priority support & bi-weekly feedback calls',
                       'Direct input on roadmap & feature prioritization',
-                      'Forever 25% discount after beta ($45K/year vs $60K)',
+                      'Forever 25% discount after beta period',
                       'Featured as launch partner (logo + case study)',
                       'First access to all new features'
                     ].map((item, i) => (
@@ -1969,30 +1969,30 @@ const LandingPageFinal = () => {
                       padding: '16px',
                       background: 'white',
                       borderRadius: '12px',
-                      border: '2px solid #14b8a6'
+                      border: '2px solid #14b8a6',
+                      textAlign: 'center'
                     }}>
                       <div style={{
-                        fontSize: '13px',
+                        fontSize: '14px',
                         fontWeight: '700',
                         color: '#0d9488',
-                        marginBottom: '4px'
+                        marginBottom: '12px'
                       }}>
-                        Your Investment:
+                        Exclusive early-bird pricing available
                       </div>
-                      <div style={{
-                        fontSize: '32px',
-                        fontWeight: '800',
-                        color: '#14b8a6',
-                        marginBottom: '4px'
+                      <Link to="/signup" style={{
+                        display: 'inline-block',
+                        padding: '10px 24px',
+                        background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+                        color: 'white',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        fontWeight: '700',
+                        textDecoration: 'none',
+                        boxShadow: '0 4px 12px rgba(20, 184, 166, 0.3)'
                       }}>
-                        $15,000
-                      </div>
-                      <div style={{
-                        fontSize: '13px',
-                        color: '#64748b'
-                      }}>
-                        6 months • Then $45K/year (25% off forever)
-                      </div>
+                        Get Pricing Details
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -2042,55 +2042,67 @@ const LandingPageFinal = () => {
               color: '#0f172a',
               marginBottom: isMobile ? '12px' : '16px'
             }}>
-              vs Monday.com: 75% Less Expensive
+              Why Choose OnboardHealth?
             </div>
             <div style={{
               display: 'flex',
               flexDirection: isMobile ? 'column' : 'row',
               justifyContent: 'center',
-              gap: isMobile ? '20px' : '64px',
-              marginBottom: isMobile ? '12px' : '16px'
+              gap: isMobile ? '16px' : '48px',
+              marginBottom: isMobile ? '16px' : '24px'
             }}>
-              <div>
-                <div style={{
-                  fontSize: '14px',
-                  color: '#64748b',
-                  marginBottom: '4px'
-                }}>
-                  Monday.com (15 practices)
+              {[
+                { icon: Brain, label: 'Healthcare-Specific AI', desc: 'Built for MSO workflows' },
+                { icon: TrendingUp, label: 'Proven ROI', desc: 'Reduce costs by 70%' },
+                { icon: Shield, label: 'Compliance Ready', desc: 'CA, TX, NY requirements' }
+              ].map((item, i) => (
+                <div key={i} style={{ textAlign: 'center' }}>
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
+                    background: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 12px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                  }}>
+                    <item.icon size={24} color="#2563eb" />
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '700',
+                    color: '#0f172a',
+                    marginBottom: '4px'
+                  }}>
+                    {item.label}
+                  </div>
+                  <div style={{
+                    fontSize: '14px',
+                    color: '#64748b'
+                  }}>
+                    {item.desc}
+                  </div>
                 </div>
-                <div style={{
-                  fontSize: isMobile ? '24px' : '32px',
-                  fontWeight: '800',
-                  color: '#dc2626',
-                  textDecoration: 'line-through'
-                }}>
-                  $240K/year
-                </div>
-              </div>
-              <div>
-                <div style={{
-                  fontSize: '14px',
-                  color: '#64748b',
-                  marginBottom: '4px'
-                }}>
-                  OnboardHealth (15 practices)
-                </div>
-                <div style={{
-                  fontSize: isMobile ? '24px' : '32px',
-                  fontWeight: '800',
-                  color: '#10b981'
-                }}>
-                  $60K/year
-                </div>
-              </div>
+              ))}
             </div>
-            <div style={{
-              fontSize: isMobile ? '14px' : '16px',
-              color: '#475569'
+            <Link to="/signup" style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '14px 32px',
+              background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+              color: 'white',
+              borderRadius: '10px',
+              fontSize: '16px',
+              fontWeight: '700',
+              textDecoration: 'none',
+              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
             }}>
-              Plus healthcare-specific AI they don't have
-            </div>
+              Schedule a Demo
+              <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </section>
