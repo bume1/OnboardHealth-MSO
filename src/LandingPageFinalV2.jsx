@@ -1522,7 +1522,7 @@ const LandingPageFinal = () => {
               color: '#0f172a',
               marginBottom: isMobile ? '12px' : '20px'
             }}>
-              Flexible Plans for Every MSO
+              Platform Packages
             </h2>
             <p style={{
               fontSize: '20px',
@@ -1530,7 +1530,7 @@ const LandingPageFinal = () => {
               maxWidth: '700px',
               margin: '0 auto'
             }}>
-              One platform. Multiple ways to start. All plans include full AI capabilities.
+              Choose the package that fits your MSO. All plans include full AI capabilities.
             </p>
           </div>
 
